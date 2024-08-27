@@ -1,0 +1,12 @@
+/* Contact Us Form */
+
+/* Hide all steps except the active one */
+
+.form-step {
+  display: none;
+}
+
+.form-step.active {
+  display: block;
+}
+

@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}
+	{{ title }}
+{% endblock %}
+
+{% block content %}
+	<!-- Start: Hero Clean -->
+    <div class="container py-4 py-xl-5">
+        <div class="row gy-4 gy-md-0">
+            <div class="col-md-6">
+                <div class="p-xl-5 m-xl-5">
+                    <img class="rounded img-fluid w-100 fit-cover" data-aos="fade" data-aos-delay="100" style="min-height: 300px;" src="{{ url_for('static', filename='assets/img/carbon-footprint_2.png') }}">
+                </div>
+            </div>
+            <div class="col-md-6 d-sm-flex d-md-flex justify-content-sm-center align-items-md-center">
+                <div style="max-width: 350px;">
+                    <h1 class="display-1 text-uppercase fw-bold py-4" data-aos="fade-up" data-aos-delay="150">Features</h1>
+                    <p class="fs-5 my-4" data-aos="fade-up" data-aos-delay="200">Empower your life with eco-friendly choices. Join us in making a difference, one small step at a time.</p>
+                    <a class="btn btn-outline-primary btn-lg border rounded-pill py-1" role="button" data-bss-hover-animate="bounce" href="#">Join Now – It's Free!</a>
+                </div>
+            </div>
+        </div>
+    </div><!-- End: Hero Clean -->
+    <!-- Start: Features -->
+    <div class="container py-4 py-xl-5">
+        <div class="row mb-5">
+            <div class="col-md-8 col-xl-6 text-center mx-auto">
+                <h1 class="display-2 fw-bold" data-aos="fade-up" data-aos-delay="100">Why Choose EcoGuide?</h1>
+                <p class="fs-5 w-lg-50" data-aos="fade-up" data-aos-delay="150">Your personal assistant for sustainable living</p>
+            </div>
+        </div>
+        <div class="row gx-1 gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
+            <div class="col py-5 card" data-aos="fade-up" data-aos-delay="150">
+                <div class="text-center d-flex flex-column align-items-center align-items-xl-center">
+                    <div class="bs-icon-lg bs-icon-rounded bs-icon-primary d-flex flex-shrink-0 justify-content-center align-items-center d-inline-block mb-3 bs-icon lg" data-bss-hover-animate="pulse"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-1-circle">
+                            <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z"></path>
+                        </svg></div>
+                    <div class="px-3">
+                        <h4 class="display-5">Track Your Carbon Footprint</h4>
+                        <p class="fs-5">Monitor your carbon footprint with our easy-to-use tools.</p>
+                        <a href="#">Learn More&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-arrow-right">
+                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col py-5 card" data-aos="fade-up" data-aos-delay="200">
+                <div class="text-center d-flex flex-column align-items-center align-items-xl-center">
+                    <div class="bs-icon-lg bs-icon-rounded bs-icon-primary d-flex flex-shrink-0 justify-content-center align-items-center d-inline-block mb-3 bs-icon lg" data-bss-hover-animate="pulse"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-2-circle">
+                            <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.646 6.24v.07H5.375v-.064c0-1.213.879-2.402 2.637-2.402 1.582 0 2.613.949 2.613 2.215 0 1.002-.6 1.667-1.287 2.43l-.096.107-1.974 2.22v.077h3.498V12H5.422v-.832l2.97-3.293c.434-.475.903-1.008.903-1.705 0-.744-.557-1.236-1.313-1.236-.843 0-1.336.615-1.336 1.306Z"></path>
+                        </svg></div>
+                    <div class="px-3">
+                        <h4 class="display-5">Personalized Recommendations</h4>
+                        <p class="fs-5">Get tailored suggestions to reduce your ecological footprint.</p>
+                        <a href="#">Learn More&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-arrow-right">
+                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col py-5 card" data-aos="fade-up" data-aos-delay="250">
+                <div class="text-center d-flex flex-column align-items-center align-items-xl-center">
+                    <div class="bs-icon-lg bs-icon-rounded bs-icon-primary d-flex flex-shrink-0 justify-content-center align-items-center d-inline-block mb-3 bs-icon lg" data-bss-hover-animate="pulse"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-3-circle">
+                            <path d="M7.918 8.414h-.879V7.342h.838c.78 0 1.348-.522 1.342-1.237 0-.709-.563-1.195-1.348-1.195-.79 0-1.312.498-1.348 1.055H5.275c.036-1.137.95-2.115 2.625-2.121 1.594-.012 2.608.885 2.637 2.062.023 1.137-.885 1.776-1.482 1.875v.07c.703.07 1.71.64 1.734 1.917.024 1.459-1.277 2.396-2.93 2.396-1.705 0-2.707-.967-2.754-2.144H6.33c.059.597.68 1.06 1.541 1.066.973.006 1.6-.563 1.588-1.354-.006-.779-.621-1.318-1.541-1.318Z"></path>
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8"></path>
+                        </svg></div>
+                    <div class="px-3">
+                        <h4 class="display-5">Participate in Eco Challenges</h4>
+                        <p class="fs-5">Participate in challenges to make a positive impact &amp; connect with others.</p>
+                        <a href="#">Learn More&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-arrow-right">
+                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col py-5 card" data-aos="fade-up" data-aos-delay="300">
+                <div class="text-center d-flex flex-column align-items-center align-items-xl-center">
+                    <div class="bs-icon-lg bs-icon-rounded bs-icon-primary d-flex flex-shrink-0 justify-content-center align-items-center d-inline-block mb-3 bs-icon lg card-header" data-bss-hover-animate="pulse"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-4-circle">
+                            <path d="M7.519 5.057c.22-.352.439-.703.657-1.055h1.933v5.332h1.008v1.107H10.11V12H8.85v-1.559H4.978V9.322c.77-1.427 1.656-2.847 2.542-4.265ZM6.225 9.281v.053H8.85V5.063h-.065c-.867 1.33-1.787 2.806-2.56 4.218Z"></path>
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8"></path>
+                        </svg></div>
+                    <div class="px-3 card-body">
+                        <h4 class="display-5">Localized Weather Insights</h4>
+                        <p class="fs-5">Receive weather insight that are specific to your local environment and climate.</p><a href="#">Learn More&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-arrow-right">
+                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"></path>
+                            </svg></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- End: Features -->
+{% endblock %}

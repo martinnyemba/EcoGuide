@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}
+	{{ title }}
+{% endblock %}
+
+{% block content %}
+	<section class="bg-success py-5" id="how-it-works">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold" data-aos="zoom-in-up" data-aos-delay="150">How EcoGuide Works</h1>
+                <p class="fs-5 text-muted" data-aos="fade-up" data-aos-delay="200">Your Journey to a Greener Lifestyle in Just Three Simple Steps</p>
+            </div>
+            <div class="row text-center">
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="icon mb-3"><i data-bss-hover-animate="flash" class="bi bi-person-circle" style="font-size:3rem;color:#28a745;"></i></div>
+                    <h4 class="display-6" data-bss-hover-animate="pulse">Personalize Your Profile</h4>
+                    <p class="text-muted">Create your EcoGuide profile by sharing your location, habits, and goals. We'll tailor recommendations just for you.</p>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="150">
+                    <div class="icon mb-3"><i data-bss-hover-animate="flash" class="bi bi-lightbulb" style="font-size:3rem;color:#28a745;"></i></div>
+                    <h4 class="display-6 text-break" data-bss-hover-animate="pulse">Get Personalized Recommendations</h4>
+                    <p class="text-muted">Receive daily tips and insights that fit seamlessly into your lifestyle, helping you make eco-friendly choices.</p>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="icon mb-3"><i data-bss-hover-animate="flash" class="bi bi-bar-chart-line" style="font-size:3rem;color:#28a745;"></i></div>
+                    <h4 class="display-6" data-bss-hover-animate="pulse">Track Your Progress</h4>
+                    <p class="text-muted">Monitor your carbon footprint and see the impact of your actions with our easy-to-use tracking tools.</p>
+                </div>
+            </div>
+            <div class="text-center mt-5">
+                <h1 class="display-5 fw-bold" data-aos="zoom-in-up" data-aos-delay="100">Ready to Start?</h1>
+                <p class="text-muted" data-aos="fade" data-aos-delay="150">Join EcoGuide today and start making a difference with personalized, actionable advice. It’s easy, impactful, and free!</p><a class="btn btn-dark btn-lg border rounded-pill" role="button" data-bss-hover-animate="pulse" href="#">Get Started Now</a>
+            </div>
+        </div>
+    </section>
+{% endblock %}
