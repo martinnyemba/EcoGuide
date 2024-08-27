@@ -1,10 +1,3 @@
-#!/usr/bin/env python3
-"""
-This Python module sets up and configures a Flask web application with various
-extensions and functionalities. The application is designed to be scalable,
-leveraging Flask's blueprint system for modularity and incorporating tools for
-database management, user authentication, and email support.
-"""
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -19,10 +12,6 @@ login.login_view = 'auth.login'
 mail = Mail()
 
 def create_app(config_class=Config):
-    """Function to create Flask Instance
-    Returns:
-        app:
-    """
     app = Flask(__name__)
     app.config.from_object(config_class)
 
