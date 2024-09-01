@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 {% block title %}
-	{{ title }}
+    {{ title }}
 {% endblock %}
 
 {% block content %}
-	<section class="position-relative py-4 py-xl-5">
+    <section class="position-relative py-4 py-xl-5">
         <div class="container position-relative">
             <div class="row d-flex justify-content-center">
                 <div class="col-md-8 col-lg-6 col-xl-5 col-xxl-4">
                     <div class="card mb-5">
                         <div class="card-body p-sm-5">
                             <h2 class="text-center mb-4" data-aos="zoom-in-up" data-aos-delay="100">Contact me</h2>
-                            <form id="contactForm" method="POST" action="{{ url_for('submit') }}">
+                            <form id="contactForm" method="POST" action="{{ url_for('main.contact') }}">
                                 <div class="form-step active">
                                     <div class="mb-3"><input class="form-control form-control" type="text" id="full-name" name="name" placeholder="Full Name" required=""></div>
                                     <div><button class="btn btn-outline-primary d-block border rounded-pill w-100 next-step" type="button">Next</button></div>
@@ -28,12 +28,76 @@
                                     <div class="mb-3"><textarea class="form-control form-control" id="message" name="message" placeholder="Message" required="" rows="10"></textarea></div>
                                     <div class="d-flex justify-content-between"><button class="btn btn-outline-secondary border rounded-pill prev-step" type="button">Previous</button><button class="btn btn-outline-success d-block border rounded-pill w-100" type="submit">Send</button></div>
                                 </div>
-                            </form><span> {% with messages = get_flashed_messages() %} {% if messages %} </span>
-                            <div class="alert alert-success mt-3" role="alert"><span> {{ messages[0] }} </span></div><span> {% endif %} {% endwith %} </span>
+                            </form>
+                            <div id="formMessage" class="alert mt-3" role="alert" style="display: none;"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        // CONTACT FORM MULTI STEP WIZARD
+            const formSteps = document.querySelectorAll('.form-step');
+            const nextBtns = document.querySelectorAll('.next-step');
+            const prevBtns = document.querySelectorAll('.prev-step');
+            let currentStep = 0;
+
+            nextBtns.forEach((button) => {
+                button.addEventListener('click', () => {
+                    formSteps[currentStep].classList.remove('active');
+                    currentStep++;
+                    formSteps[currentStep].classList.add('active');
+                });
+            });
+
+            prevBtns.forEach((button) => {
+                button.addEventListener('click', () => {
+                    formSteps[currentStep].classList.remove('active');
+                    currentStep--;
+                    formSteps[currentStep].classList.add('active');
+                });
+            });
+
+            // Form submission handling
+            const form = document.getElementById('contactForm');
+            const formMessage = document.getElementById('formMessage');
+
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent default form submission
+
+                const formData = new FormData(form);
+
+                fetch('{{ url_for("main.contact") }}', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    formMessage.style.display = 'block';
+                    if (data.success) {
+                        formMessage.className = 'alert alert-success mt-3';
+                        form.reset(); // Reset the form fields
+                        currentStep = 0; // Reset to first step
+                        formSteps.forEach((step, index) => {
+                            step.classList.toggle('active', index === 0);
+                        });
+                    } else {
+                        formMessage.className = 'alert alert-danger mt-3';
+                    }
+                    formMessage.textContent = data.message;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    formMessage.style.display = 'block';
+                    formMessage.className = 'alert alert-danger mt-3';
+                    formMessage.textContent = 'An error occurred while sending your message. Please try again later.';
+                });
+            });
+        });
+    </script>
 {% endblock %}

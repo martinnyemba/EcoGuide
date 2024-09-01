@@ -10,3 +10,371 @@
   display: block;
 }
 
+/* sustainability-score calculation */
+
+.dashboard {
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 0 15px;
+}
+
+.card {
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.sustainability-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.score-gauge {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+}
+
+.score-breakdown {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.category-score {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.category-bar {
+  background-color: #e0e0e0;
+  height: 20px;
+  width: 100%;
+  max-width: 70%;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.category-fill {
+  height: 100%;
+  background-color: #4CAF50;
+}
+
+.recommendations {
+  margin-top: 20px;
+}
+
+.quiz-container {
+  margin-top: 20px;
+}
+
+.quiz-question {
+  margin-bottom: 20px;
+}
+
+.quiz-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.quiz-options button {
+  padding: 10px;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.quiz-options button:hover {
+  background-color: #e0e0e0;
+}
+
+.quiz-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.quiz-navigation button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.quiz-navigation button:hover {
+  background-color: #45a049;
+}
+
+.quiz-navigation button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Responsive adjustments */
+
+@media (max-width: 768px) {
+  .category-score {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .quiz-options {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .quiz-navigation {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .quiz-navigation button {
+    width: 100%;
+  }
+}
+
+/* eco-calculator, .goal-setting */
+
+.eco-calculator, .goal-setting {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.action-impact {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.impact-bar {
+  flex-grow: 1;
+  height: 20px;
+  background-color: #e0e0e0;
+  margin: 0 10px;
+  position: relative;
+}
+
+.impact-value {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: #4CAF50;
+  transition: width 0.5s ease;
+}
+
+.goal-progress {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.goal-bar {
+  flex-grow: 1;
+  height: 20px;
+  background-color: #e0e0e0;
+  margin: 0 10px;
+  position: relative;
+}
+
+.goal-value {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: #2196F3;
+  transition: width 0.5s ease;
+}
+
+input[type="range"] {
+  width: 100%;
+}
+
+/* Impact ecogude app Calculator */
+
+/* ============================================= */
+
+.impact-calculator {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.impact-calculator table {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.impact-calculator th, .impact-calculator td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+.impact-calculator th {
+  background-color: #3498db;
+  color: white;
+}
+
+.impact-calculator input[type="range"] {
+  width: 100%;
+}
+
+.impact-calculator .impact {
+  font-weight: bold;
+}
+
+.impact-calculator .low-impact {
+  color: #27ae60;
+}
+
+.impact-calculator .medium-impact {
+  color: #f39c12;
+}
+
+.impact-calculator .high-impact {
+  color: #c0392b;
+}
+
+.impact-calculator #totalImpactBar {
+  width: 100%;
+  height: 20px;
+  background-color: #ecf0f1;
+  margin-top: 10px;
+  padding: 5px;
+}
+
+.impact-calculator #totalImpactFill {
+  height: 100%;
+  background-color: #3498db;
+  width: 0;
+  transition: width 0.5s ease-in-out;
+}
+
+.impact-calculator button {
+  background-color: var(--bs-success);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.impact-calculator button:hover {
+  background-color: var(--bs-link-color);
+}
+
+.impact-calculator #searchInput, .impact-calculator #categoryFilter {
+  width: calc(50% - 5px);
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.impact-calculator .hidden {
+  display: none;
+}
+
+.impact-calculator #tips {
+  background-color: var(--bs-success-text-emphasis);
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.impact-calculator #tips h3 {
+  margin-top: 0;
+}
+
+.impact-calculator #impactChart {
+  width: 100%;
+  height: 300px;
+  margin-top: 20px;
+}
+
+/* Responsive styles */
+
+@media (max-width: 576px) {
+  .impact-calculator th, .impact-calculator td {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 576px) {
+  .impact-calculator button {
+    padding: 8px 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .impact-calculator #searchInput, .impact-calculator #categoryFilter {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+}
+
+@media (max-width: 768px) {
+  .impact-calculator th, .impact-calculator td {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .impact-calculator button {
+    padding: 9px 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .impact-calculator #searchInput, .impact-calculator #categoryFilter {
+    width: calc(50% - 5px);
+  }
+}
+
+@media (max-width: 992px) {
+  .impact-calculator th, .impact-calculator td {
+    padding: 11px;
+  }
+}
+
+@media (max-width: 992px) {
+  .impact-calculator button {
+    padding: 10px 19px;
+  }
+}
+
+@media (max-width: 992px) {
+  .impact-calculator #searchInput, .impact-calculator #categoryFilter {
+    width: calc(50% - 5px);
+  }
+}
+
+@media (max-width: 1200px) {
+  .impact-calculator th, .impact-calculator td {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .impact-calculator button {
+    padding: 10px 20px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .impact-calculator #searchInput, .impact-calculator #categoryFilter {
+    width: calc(50% - 5px);
+  }
+}
+

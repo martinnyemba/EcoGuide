@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}
+	{{ title }}
+{% endblock %}
+{% block content %}
+	<section>
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="calculator-container p-4">
+                        <h1 class="display-5 fw-bold text-center mb-4 py-4" style="background: url({{ url_for('static', filename='assets/img/biodegradable.png') }}) center / auto no-repeat;">Comprehensive Carbon Footprint Calculator</h1>
+                        <form id="carbonForm">
+                            <h4 class="display-5 fw-semibold text-success text-center py-2">Energy</h4>
+                            <div class="mb-3"><label class="form-label fs-5" for="electricity">Monthly Electricity Usage (kWh)</label><input class="form-control form-control" type="number" id="electricity" name="electricity" required=""></div>
+                            <div class="mb-3"><label class="form-label fs-5" for="gas">Monthly Natural Gas Usage (m³)</label><input class="form-control form-control" type="number" id="gas" name="gas" required=""></div>
+                            <div class="mb-3"><label class="form-label fs-5" for="oil">Annual Home Heating Oil Usage (litres)</label><input class="form-control form-control" type="number" id="oil" name="oil" required=""></div>
+                            <h4 class="display-5 fw-semibold text-success text-center py-2">Transportation</h4>
+                            <div class="mb-3"><label class="form-label fs-5" for="mileage">Annual Car Mileage (km)</label><input class="form-control form-control" type="number" id="mileage" name="mileage" required=""></div>
+                            <div class="mb-3"><label class="form-label fs-5" for="flights">Number of Round-Trip Flights per Year</label><input class="form-control form-control" type="number" id="flights" name="flights" required=""></div>
+                            <div class="mb-3"><label class="form-label fs-5" for="publictransport">Weekly Public Transportation Distance (km)</label><input class="form-control form-control" type="number" id="publictransport" name="publictransport" required=""></div>
+                            <h4 class="display-5 fw-semibold text-success text-center py-2">Lifestyle</h4>
+                            <div class="mb-3"><label class="form-label fs-5" for="diet">Diet</label><select class="form-select form-select" id="diet" name="diet" required="">
+                                    <option value="">Choose...</option>
+                                    <option value="meat_lover">Meat Lover</option>
+                                    <option value="average">Average</option>
+                                    <option value="vegetarian">Vegetarian</option>
+                                    <option value="vegan">Vegan</option>
+                                </select></div>
+                            <div class="mb-3"><label class="form-label fs-5" for="waste">Weekly Waste Production (kg)</label><input class="form-control form-control" type="number" id="waste" name="waste" required=""></div>
+                            <div class="mb-3"><label class="form-label fs-5" for="water">Daily Water Consumption (litres)</label><input class="form-control form-control" type="number" id="water" name="water" required=""></div>
+                            <div class="mb-3"><label class="form-label fs-5" for="shopping">Monthly Spending on Consumer Goods ($)</label><input class="form-control form-control" type="number" id="shopping" name="shopping" required=""></div><button class="btn btn-success border rounded-pill w-100" type="submit">Calculate</button>
+                        </form>
+                        <div class="text-center mt-4 result card py-5" id="result"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+	<script>
+        $(document).ready(function() {
+            $('#carbonForm').on('submit', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '/carbonfootprint',
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        $('#result').text('Your estimated annual carbon footprint is ' + response.result + ' metric tons of CO2.');
+                    },
+                    error: function() {
+                        $('#result').text('An error occurred. Please try again.');
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

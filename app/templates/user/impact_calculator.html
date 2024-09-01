@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+{% block title %}
+	{{ title }}
+{% endblock %}
+
+{% block content %}
+    {#	impact calculator#}
+    <section class="container">
+        <div class="impact-calculator container-fluid my-4">
+            <h1 class="display-5 fw-bold my-4 text-center py-3">Impact Calculator</h1><input type="text" id="searchInput" placeholder="Search actions..." name="search"><select id="categoryFilter" style="padding: 12px;">
+                <option value="">All Categories</option>
+            </select>
+
+            <div class="table table-dark py-4 table-responsive">
+                <table id="actionsTable">
+                    <tbody>
+                        <tr>
+                            <td>Action</td>
+                            <td>Impact</td>
+                            <td>Category</td>
+                            <td>Customize</td>
+                        </tr>
+                        {% for action in actions %}
+                        <tr class="action-row" data-category="{{ action.category }}">
+                            <td>{{ action.name }}</td>
+                            <td class="impact" data-original-impact="{{ action.impact }}">{{ action.impact }}</td>
+                            <td>{{ action.category }}</td>
+                            <td>
+                                <input type="range" class="impact-slider" max="10" min="0" value="{{ action.impact }}" oninput="updateImpact(this)">
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <h2 class="display-5 text-center py-3">Total Impact: <span class="text-capitalize fw-bold text-primary" id="totalImpact">0</span></h2>
+            <div id="totalImpactBar" class="rounded-4">
+                <div id="totalImpactFill"></div>
+            </div>
+            <div class="row m-4">
+                <button class="border rounded-pill my-2" type="button" onclick="resetImpacts()">Reset to Default</button>
+                <button class="border rounded-pill my-2" onclick="randomizeImpacts()">Randomize Impacts</button>
+            </div>
+            <div id="tips" class="py-4">
+                <h3 class="display-5 text-center">Eco-Friendly Tips</h3>
+                <ul class="py-2">
+                    {% for tip in tips %}
+                    <li class="mb-3">{{ tip }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <canvas id="impactChart" class="my-5"></canvas>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        let chart;
+
+        function updateImpact(input) {
+            const row = input.closest('tr');
+            const impactCell = row.querySelector('.impact');
+            const newImpact = input.value;
+            impactCell.textContent = newImpact;
+            updateImpactColor(impactCell, newImpact);
+            calculateTotalImpact();
+            updateChart();
+        }
+
+        function updateImpactColor(cell, impact) {
+            cell.classList.remove('low-impact', 'medium-impact', 'high-impact');
+            if (impact <= 3) cell.classList.add('low-impact');
+            else if (impact <= 7) cell.classList.add('medium-impact');
+            else cell.classList.add('high-impact');
+        }
+
+        function calculateTotalImpact() {
+            const impacts = document.querySelectorAll('.impact');
+            let total = 0;
+            impacts.forEach(impact => {
+                total += parseInt(impact.textContent);
+            });
+            document.getElementById('totalImpact').textContent = total;
+
+            const maxPossibleImpact = impacts.length * 10;
+            const percentageFill = (total / maxPossibleImpact) * 100;
+            document.getElementById('totalImpactFill').style.width = `${percentageFill}%`;
+        }
+
+        function resetImpacts() {
+            const impacts = document.querySelectorAll('.impact');
+            impacts.forEach(impact => {
+                const originalImpact = impact.dataset.originalImpact;
+                impact.textContent = originalImpact;
+                updateImpactColor(impact, originalImpact);
+                impact.closest('tr').querySelector('input[type="range"]').value = originalImpact;
+            });
+            calculateTotalImpact();
+            updateChart();
+        }
+
+        function randomizeImpacts() {
+            const impacts = document.querySelectorAll('.impact');
+            impacts.forEach(impact => {
+                const randomImpact = Math.floor(Math.random() * 11);
+                impact.textContent = randomImpact;
+                updateImpactColor(impact, randomImpact);
+                impact.closest('tr').querySelector('input[type="range"]').value = randomImpact;
+            });
+            calculateTotalImpact();
+            updateChart();
+        }
+
+        function filterActions() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const category = document.getElementById('categoryFilter').value;
+            const rows = document.querySelectorAll('.action-row');
+            rows.forEach(row => {
+                const actionName = row.querySelector('td').textContent.toLowerCase();
+                const actionCategory = row.dataset.category;
+                const matchesSearch = actionName.includes(searchTerm);
+                const matchesCategory = category === '' || actionCategory === category;
+                if (matchesSearch && matchesCategory) {
+                    row.classList.remove('hidden');
+                } else {
+                    row.classList.add('hidden');
+                }
+            });
+        }
+
+        function populateCategoryFilter() {
+            const categories = new Set();
+            document.querySelectorAll('.action-row').forEach(row => {
+                categories.add(row.dataset.category);
+            });
+            const categoryFilter = document.getElementById('categoryFilter');
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categoryFilter.appendChild(option);
+            });
+        }
+
+        function updateChart() {
+            const labels = [];
+            const data = [];
+            document.querySelectorAll('.action-row').forEach(row => {
+                labels.push(row.querySelector('td').textContent);
+                data.push(parseInt(row.querySelector('.impact').textContent));
+            });
+
+            if (chart) {
+                chart.data.labels = labels;
+                chart.data.datasets[0].data = data;
+                chart.update();
+            } else {
+                const ctx = document.getElementById('impactChart').getContext('2d');
+                chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Impact',
+                            data: data,
+                            backgroundColor: 'rgba(52, 152, 219, 0.5)',
+                            borderColor: 'rgba(52, 152, 219, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 10
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        document.getElementById('searchInput').addEventListener('input', filterActions);
+        document.getElementById('categoryFilter').addEventListener('change', filterActions);
+
+        // Initialize
+        document.querySelectorAll('.impact').forEach(impact => {
+            updateImpactColor(impact, impact.textContent);
+        });
+        calculateTotalImpact();
+        populateCategoryFilter();
+        updateChart();
+    </script>
+{% endblock %}
