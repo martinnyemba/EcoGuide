@@ -66,9 +66,9 @@ Here’s a visual preview of EcoGuide’s features and interface:
 |:--:|:-----------------------------------------------:|
 | **Localized Weather Insights** |        **Participate in Eco Challenges**        |
 
-| ![User Account and Progress Tracking](screenshots/landing-1.PNG) | ![Sign Up and Get Started](screenshots/landing-1.PNG) |
-|:--:|:--:|
-| **User Account and Progress Tracking** | **Sign Up and Get Started** |
+| ![User Account and Progress Tracking](screenshots/register.PNG) | ![Sign Up and Get Started](screenshots/login.PNG) |
+|:----------------------------------------------------:|:-----------------------------------------:|
+|        **User Account and Progress Tracking**        |        **Sign Up and Get Started**        |
 
 
 
