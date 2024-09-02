@@ -1,11 +1,12 @@
-import random
-
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_required, current_user
-# from app.models import Service, BlogPost
 from app import db
-from datetime import datetime
+from app.forms import ChangePasswordForm, UpdateAddressForm, UpdateProfileForm
+from werkzeug.security import check_password_hash, generate_password_hash
+from app.models import Address, User
 from app.utils import calculate_footprint
+from datetime import datetime
+import random
 
 bp = Blueprint('user', __name__)
 
@@ -38,6 +39,7 @@ def dashboard():
 
 
 @bp.route('/impact_calculator')
+@login_required
 def impact_calculator():
     """Impact Calculator"""
     actions = [
@@ -64,6 +66,7 @@ def impact_calculator():
 
 
 @bp.route('/carbonfootprint', methods=['GET', 'POST'])
+@login_required
 def calculator():
     if request.method == 'POST':
         # Handle form submission
@@ -75,3 +78,95 @@ def calculator():
         return jsonify(result=result)
 
     return render_template('user/calculator.html')
+
+
+@bp.route('/profile')
+@login_required
+def profile():
+    update_profile_form = UpdateProfileForm()
+    change_password_form = ChangePasswordForm()
+    update_address_form = UpdateAddressForm()
+
+    # Pre-fill the update profile form with current user data
+    update_profile_form.username.data = current_user.username
+    update_profile_form.email.data = current_user.email
+    update_profile_form.first_name.data = current_user.first_name
+    update_profile_form.last_name.data = current_user.last_name
+    update_profile_form.phone_number.data = current_user.phone_number
+
+    # Pre-fill the address form if the user has an address
+    if current_user.address:
+        update_address_form.street.data = current_user.address.street
+        update_address_form.city.data = current_user.address.city
+        update_address_form.state.data = current_user.address.state
+        update_address_form.country.data = current_user.address.country
+
+    return render_template('user/profile.html',
+                           update_profile_form=update_profile_form,
+                           change_password_form=change_password_form,
+                           update_address_form=update_address_form)
+
+@bp.route('/update_profile', methods=['POST'])
+@login_required
+def update_profile():
+    form = UpdateProfileForm()
+    if form.validate_on_submit():
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        current_user.first_name = form.first_name.data
+        current_user.last_name = form.last_name.data
+        current_user.phone_number = form.phone_number.data
+        db.session.commit()
+        return jsonify({
+            'success': True,
+            'username': current_user.username,
+            'email': current_user.email,
+            'first_name': current_user.first_name,
+            'last_name': current_user.last_name,
+            'phone_number': current_user.phone_number or 'Not provided'
+        })
+    return jsonify({'success': False, 'errors': form.errors}), 400
+
+@bp.route('/change_password', methods=['POST'])
+@login_required
+def change_password():
+    form = ChangePasswordForm()
+    if form.validate_on_submit():
+        if check_password_hash(current_user.password_hash, form.current_password.data):
+            current_user.password_hash = generate_password_hash(form.new_password.data)
+            db.session.commit()
+            flash('Your password has been updated.', 'success')
+        else:
+            flash('Incorrect current password.', 'danger')
+    else:
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(f"{field.capitalize()}: {error}", 'danger')
+    return redirect(url_for('profile'))
+
+@bp.route('/update_address', methods=['POST'])
+@login_required
+def update_address():
+    form = UpdateAddressForm()
+    if form.validate_on_submit():
+        if current_user.address:
+            current_user.address.street = form.street.data
+            current_user.address.city = form.city.data
+            current_user.address.state = form.state.data
+            current_user.address.country = form.country.data
+        else:
+            new_address = Address(
+                user_id=current_user.id,
+                street=form.street.data,
+                city=form.city.data,
+                state=form.state.data,
+                country=form.country.data
+            )
+            db.session.add(new_address)
+        db.session.commit()
+        flash('Your address has been updated.', 'success')
+    else:
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(f"{field.capitalize()}: {error}", 'danger')
+    return redirect(url_for('user.profile'))
