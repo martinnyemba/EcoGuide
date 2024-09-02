@@ -71,6 +71,121 @@ Here’s a visual preview of EcoGuide’s features and interface:
 |        **User Account and Progress Tracking**        |        **Sign Up and Get Started**        |
 
 
+# - Database Models
+----------------------------------------------------
+
+This section explains the database models used in our application. Below is a detailed description of each model and its relationships.
+
+## Models
+
+### Role
+- **Table Name**: `roles`
+- **Columns**:
+  - `id`: Integer, Primary Key
+  - `name`: String(64), Unique
+- **Relationships**:
+  - `users`: One-to-Many relationship with `User`
+
+### User
+- **Table Name**: `users`
+- **Columns**:
+  - `id`: Integer, Primary Key
+  - `username`: String(64), Indexed, Unique
+  - `email`: String(120), Indexed, Unique
+  - `password_hash`: String(128)
+  - `first_name`: String(64)
+  - `last_name`: String(64)
+  - `phone_number`: String(20)
+  - `reset_token`: String(100)
+  - `reset_token_expiration`: DateTime
+  - `role_id`: Integer, Foreign Key (`roles.id`)
+- **Relationships**:
+  - `activities`: One-to-Many relationship with `Activity`
+  - `recommendations`: One-to-Many relationship with `Recommendation`
+  - `user_challenges`: One-to-Many relationship with `UserChallenges`
+  - `carbon_footprint`: One-to-One relationship with `CarbonFootprint`
+  - `address`: One-to-One relationship with `Address`
+
+### Address
+- **Table Name**: `addresses`
+- **Columns**:
+  - `id`: Integer, Primary Key
+  - `street`: String(128)
+  - `city`: String(64)
+  - `state`: String(64)
+  - `country`: String(64)
+  - `user_id`: Integer, Foreign Key (`users.id`)
+
+### Activity
+- **Table Name**: `activities`
+- **Columns**:
+  - `id`: Integer, Primary Key
+  - `user_id`: Integer, Foreign Key (`users.id`)
+  - `activity_type`: String(20)
+  - `description`: String(200)
+  - `carbon_impact`: Float
+  - `date`: Date, Default to current date
+
+### Recommendation
+- **Table Name**: `recommendations`
+- **Columns**:
+  - `id`: Integer, Primary Key
+  - `title`: String(100)
+  - `description`: String(500)
+  - `impact`: Float
+  - `user_id`: Integer, Foreign Key (`users.id`)
+
+### Contact
+- **Table Name**: `contacts`
+- **Columns**:
+  - `id`: Integer, Primary Key
+  - `name`: String(64), Indexed
+  - `email`: String(120), Indexed
+  - `message`: Text
+  - `timestamp`: DateTime, Indexed, Default to current date
+
+### UserChallenges
+- **Table Name**: `user_challenges`
+- **Columns**:
+  - `id`: Integer, Primary Key
+  - `user_id`: Integer, Foreign Key (`users.id`)
+  - `challenge_id`: Integer, Foreign Key (`eco_challenges.id`)
+- **Relationships**:
+  - `eco_challenge`: Many-to-One relationship with `EcoChallenges`
+
+### CarbonFootprint
+- **Table Name**: `carbon_footprints`
+- **Columns**:
+  - `id`: Integer, Primary Key
+  - `user_id`: Integer, Foreign Key (`users.id`)
+  - `footprint`: Float
+
+### EcoChallenges
+- **Table Name**: `eco_challenges`
+- **Columns**:
+  - `id`: Integer, Primary Key
+  - `name`: String(80)
+  - `description`: Text
+
+## User Loader
+The `load_user` function is used to load a user by their ID for Flask-Login.
+
+## Password Management
+The `User` model includes methods for setting and checking passwords, as well as generating and verifying password reset tokens.
+
+## Token Management
+The `User` model includes methods for generating and verifying password reset tokens using `itsdangerous.TimedSerializer`.
+
+## Contact
+The `Contact` model is used to store contact messages from users, including their name, email, message, and timestamp.
+
+## Usage
+To use these models, import the `db` object from your application and create the tables using `db.create_all()`.
+
+```python
+from app import db
+db.create_all()
+```
 
 ## Team
 **Martin Nyemba**: Full-stack Developer and Project Lead  
