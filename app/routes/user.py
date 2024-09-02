@@ -1,12 +1,14 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_required, current_user
 from app import db
-from app.forms import ChangePasswordForm, UpdateAddressForm, UpdateProfileForm
+from app.carbon_interface import get_carbon_estimate
+from app.forms import ChangePasswordForm, UpdateAddressForm, UpdateProfileForm, EstimateForm
 from werkzeug.security import check_password_hash, generate_password_hash
 from app.models import Address, User
 from app.utils import calculate_footprint
 from datetime import datetime
 import random
+from app.weather import get_weather_and_aqi
 
 bp = Blueprint('user', __name__)
 
@@ -37,6 +39,16 @@ def dashboard():
     """Dashboard"""
     return render_template('user/dashboard.html')
 
+
+@bp.route('/carbon_estimate', methods=['GET', 'POST'])
+def carbon_estimate():
+    form = EstimateForm()
+    if form.validate_on_submit():
+        estimate_type = form.estimate_type.data
+        data = form.data
+        result = get_carbon_estimate(estimate_type, data)
+        return jsonify(result)
+    return render_template('user/estimates.html', form=form)
 
 @bp.route('/impact_calculator')
 @login_required
@@ -144,6 +156,7 @@ def change_password():
                 flash(f"{field.capitalize()}: {error}", 'danger')
     return redirect(url_for('profile'))
 
+
 @bp.route('/update_address', methods=['POST'])
 @login_required
 def update_address():
@@ -170,3 +183,21 @@ def update_address():
             for error in errors:
                 flash(f"{field.capitalize()}: {error}", 'danger')
     return redirect(url_for('user.profile'))
+
+
+@bp.route('/weather', methods=['POST'])
+@login_required
+def weather():
+    data = request.json
+    city = data.get('city')
+    state = data.get('state')
+    country = data.get('country')
+
+    weather_data = get_weather_and_aqi(city, state, country)
+    return jsonify(weather_data)
+
+
+@bp.route('/get_weather', methods=['GET', 'POST'])
+@login_required
+def get_weather():
+    return render_template('user/weather.html')
