@@ -1,16 +1,17 @@
 # app/utils.py
-from flask import abort, url_for, current_app
+from flask import abort, url_for, current_app, request, render_template
 from flask_login import current_user
-from functools import wraps
 from flask_mail import Message
+from markupsafe import Markup
+
 from app import mail
-from itsdangerous import TimedSerializer as Serializer
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 
 def send_reset_email(user):
     token = user.get_reset_token()
     msg = Message('Password Reset Request',
-                  sender='noreply@yourdomain.com',
+                  sender='emtechmediapro@gmail.com',
                   recipients=[user.email])
     msg.body = f'''To reset your password, visit the following link:
 {url_for('auth.reset_token', token=token, _external=True)}
@@ -20,23 +21,24 @@ If you did not make this request then simply ignore this email and no changes wi
     mail.send(msg)
 
 
-
-def admin_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if not current_user.is_authenticated or current_user.role.name != 'Admin':
-            abort(403)
-        return f(*args, **kwargs)
-
-    return decorated_function
-
-
 def send_email(subject, sender, recipients, text_body, html_body):
     msg = Message(subject, sender=sender, recipients=recipients)
     msg.body = text_body
     msg.html = html_body
     mail.send(msg)
 
+
+def render_pagination(pagination, endpoint, **kwargs):
+    args = request.args.copy()
+    args.update(kwargs)
+    page_urls = []
+    for page in pagination.iter_pages(left_edge=2, left_current=2, right_current=3, right_edge=2):
+        if page:
+            args['page'] = page
+            page_urls.append((page, url_for(endpoint, **args)))
+        else:
+            page_urls.append((None, None))
+    return Markup(render_template('_pagination.html', pagination=pagination, page_urls=page_urls))
 
 def calculate_footprint(data):
     # Convert form data to float
