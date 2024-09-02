@@ -1,7 +1,9 @@
 # app/forms.py
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, DateTimeField
-from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
+    SelectField, DateTimeField, FloatField, IntegerField
+from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, \
+    Length, Optional
 from app.models import User, Address
 
 
@@ -70,3 +72,38 @@ class UpdateAddressForm(FlaskForm):
     state = StringField('State', validators=[DataRequired()])
     country = StringField('Country', validators=[DataRequired()])
     submit = SubmitField('Update Address')
+
+
+# Forms for Carbon Interface API
+class EstimateForm(FlaskForm):
+    estimate_type = SelectField('Estimate Type', choices=[
+        ('electricity', 'Electricity'),
+        ('shipping', 'Shipping'),
+        ('flight', 'Flight'),
+        ('vehicle', 'Vehicle')
+    ], validators=[DataRequired()])
+
+    # Electricity fields
+    electricity_usage = FloatField('Electricity Usage (kWh)', validators=[Optional()])
+    country = StringField('Country', validators=[Optional()])
+
+    # Shipping fields
+    weight = FloatField('Weight (kg)', validators=[Optional()])
+    distance = FloatField('Distance (km)', validators=[Optional()])
+    method = SelectField('Shipping Method', choices=[
+        ('truck', 'Truck'),
+        ('train', 'Train'),
+        ('ship', 'Ship'),
+        ('plane', 'Plane')
+    ], validators=[Optional()])
+
+    # Flight fields
+    passengers = IntegerField('Number of Passengers', validators=[Optional()])
+    departure_airport = StringField('Departure Airport', validators=[Optional()])
+    destination_airport = StringField('Destination Airport', validators=[Optional()])
+
+    # Vehicle fields
+    distance_km = FloatField('Distance (km)', validators=[Optional()])
+    vehicle_make = StringField('Vehicle Make', validators=[Optional()])
+    vehicle_model = StringField('Vehicle Model', validators=[Optional()])
+    vehicle_year = IntegerField('Vehicle Year', validators=[Optional()])
