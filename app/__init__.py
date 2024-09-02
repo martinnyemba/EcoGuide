@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_mail import Mail
+from flask_wtf.csrf import CSRFProtect
 from config import Config
 
 db = SQLAlchemy()
@@ -14,6 +15,7 @@ login.login_view = 'auth.login'
 login.login_message_category = 'info'
 mail = Mail()
 bcrypt = Bcrypt()
+csrf = CSRFProtect()
 
 
 def create_app(config_class=Config):
@@ -57,5 +59,8 @@ def create_app(config_class=Config):
     app.register_blueprint(auth.bp)
     app.register_blueprint(user.bp)
     app.register_blueprint(admin.bp)
+
+    with app.app_context():
+        db.create_all()
 
     return app
