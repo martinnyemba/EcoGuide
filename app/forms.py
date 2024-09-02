@@ -8,6 +8,7 @@ from app.models import User, Address
 
 
 class RegistrationForm(FlaskForm):
+    """Form for users to register an account."""
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -18,17 +19,22 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Sign Up')
 
     def validate_username(self, username):
+        """Validate that the username is unique."""
+        if not username.data.isalnum():
+            raise ValidationError('Username can only contain alphanumeric characters.')
         user = User.query.filter_by(username=username.data).first()
         if user:
             raise ValidationError('That username is taken. Please choose a different one.')
 
     def validate_email(self, email):
+        """Validate that the email is unique."""
         user = User.query.filter_by(email=email.data).first()
         if user:
             raise ValidationError('That email is taken. Please choose a different one.')
 
 
 class LoginForm(FlaskForm):
+    """Form for users to log in."""
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
@@ -36,16 +42,19 @@ class LoginForm(FlaskForm):
 
 
 class RequestResetForm(FlaskForm):
+    """Form for users to request a password reset."""
     email = StringField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Request Password Reset')
 
     def validate_email(self, email):
+        """Validate that the email exists in the database."""
         user = User.query.filter_by(email=email.data).first()
         if user is None:
             raise ValidationError('There is no account with that email. You must register first.')
 
 
 class ResetPasswordForm(FlaskForm):
+    """Form for users to reset their password."""
     password = PasswordField('New Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm New Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Reset Password')
@@ -53,6 +62,7 @@ class ResetPasswordForm(FlaskForm):
 
 # User Forms
 class UpdateProfileForm(FlaskForm):
+    """Form for users to update their profile."""
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     first_name = StringField('First Name', validators=[DataRequired()])
@@ -60,13 +70,17 @@ class UpdateProfileForm(FlaskForm):
     phone_number = StringField('Phone Number')
     submit = SubmitField('Update Profile')
 
+
 class ChangePasswordForm(FlaskForm):
+    """Form for users to change their password."""
     current_password = PasswordField('Current Password', validators=[DataRequired()])
     new_password = PasswordField('New Password', validators=[DataRequired(), Length(min=6)])
     confirm_password = PasswordField('Confirm New Password', validators=[DataRequired(), EqualTo('new_password')])
     submit = SubmitField('Change Password')
 
+
 class UpdateAddressForm(FlaskForm):
+    """Form for users to update their address."""
     street = StringField('Street', validators=[DataRequired()])
     city = StringField('City', validators=[DataRequired()])
     state = StringField('State', validators=[DataRequired()])
@@ -76,6 +90,7 @@ class UpdateAddressForm(FlaskForm):
 
 # Forms for Carbon Interface API
 class EstimateForm(FlaskForm):
+    """Form for users to calculate their carbon footprint."""
     estimate_type = SelectField('Estimate Type', choices=[
         ('electricity', 'Electricity'),
         ('shipping', 'Shipping'),
