@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block title %}
+    Carbon Estimates
+{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block content %}
+    <section>
+        <div class="container py-5">
+            <h1 class="text-center mb-5" data-aos="zoom-in-up" data-aos-delay="150">Carbon Estimate Calculator</h1>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="estimateForm"><span> {{ form.hidden_tag() }} </span>
+                                <div class="mb-3">
+                                    <label class="form-label" for="estimate_type">Estimate Type</label>
+                                    <select class="form-select form-select" id="estimate_type" name="estimate_type">
+                                        <option value="electricity">Electricity</option>
+                                        <option value="shipping">Shipping</option>
+                                        <option value="flight">Flight</option>
+                                        <option value="vehicle">Vehicle</option>
+                                    </select>
+                                </div>
+                                <div id="electricityFields">
+                                    <div class="mb-3"><label class="form-label" for="electricity_usage">Electricity Usage (kWh)</label><input class="form-control form-control" type="number" id="electricity_usage" name="electricity_usage"></div>
+                                    <div class="mb-3"><label class="form-label" for="country">Country</label><input class="form-control form-control" type="text" id="country" name="country"></div>
+                                </div>
+                                <div id="shippingFields" style="display:none;">
+                                    <div class="mb-3"><label class="form-label" for="weight">Weight (kg)</label><input class="form-control form-control" type="number" id="weight" name="weight"></div>
+                                    <div class="mb-3"><label class="form-label" for="distance">Distance (km)</label><input class="form-control form-control" type="number" id="distance" name="distance"></div>
+                                    <div class="mb-3"><label class="form-label" for="method">Shipping Method</label><select class="form-select form-select" id="method" name="method">
+                                            <option value="truck">Truck</option>
+                                            <option value="train">Train</option>
+                                            <option value="ship">Ship</option>
+                                            <option value="plane">Plane</option>
+                                        </select></div>
+                                </div>
+                                <div id="flightFields" style="display:none;">
+                                    <div class="mb-3"><label class="form-label" for="passengers">Number of Passengers</label><input class="form-control form-control" type="number" id="passengers" name="passengers"></div>
+                                    <div class="mb-3"><label class="form-label" for="departure_airport">Departure Airport</label><input class="form-control form-control" type="text" id="departure_airport" name="departure_airport"></div>
+                                    <div class="mb-3"><label class="form-label" for="destination_airport">Destination Airport</label><input class="form-control form-control" type="text" id="destination_airport" name="destination_airport"></div>
+                                </div>
+                                <div id="vehicleFields" style="display:none;">
+                                    <div class="mb-3"><label class="form-label" for="distance_km">Distance (km)</label><input class="form-control form-control" type="number" id="distance_km" name="distance_km"></div>
+                                    <div class="mb-3"><label class="form-label" for="vehicle_make">Vehicle Make</label><input class="form-control form-control" type="text" id="vehicle_make" name="vehicle_make"></div>
+                                    <div class="mb-3"><label class="form-label" for="vehicle_model">Vehicle Model</label><input class="form-control form-control" type="text" id="vehicle_model" name="vehicle_model"></div>
+                                    <div class="mb-3"><label class="form-label" for="vehicle_year">Vehicle Year</label><input class="form-control form-control" type="number" id="vehicle_year" name="vehicle_year"></div>
+                                </div>
+                                <hr class="my-4"><button class="btn btn-success border rounded-pill w-100" data-bss-hover-animate="pulse" type="submit">Get Carbon Estimate</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-5" id="resultCard" style="display:none;">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="card-title">Estimate Result</h2><pre id="resultJson" class="bg-success p-3 rounded"></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function() {
+            function showFields(estimateType) {
+                $('#electricityFields, #shippingFields, #flightFields, #vehicleFields').hide();
+                $(`#${estimateType}Fields`).show();
+            }
+
+            $('#estimate_type').change(function() {
+                showFields($(this).val());
+            });
+
+            $('#estimateForm').submit(function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+
+                $.ajax({
+                    url: '{{ url_for('user.carbon_estimate') }}',
+                    method: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    success: function(result) {
+                        $('#resultJson').text(JSON.stringify(result, null, 2));
+                        $('#resultCard').show();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        alert('An error occurred. Please try again.');
+                    }
+                });
+            });
+
+            // Initialize with the default estimate type
+            showFields($('#estimate_type').val());
+        });
+    </script>
+{% endblock %}

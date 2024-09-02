@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+
+{% block title %}Weather{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .weather-card {
+            background-color: var(--bs-dark);
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .weather-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .weather-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .aqi-indicator {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 15px;
+            font-weight: bold;
+        }
+        .good { background-color: #28a745; color: white; }
+        .fair { background-color: #ffc107; color: black; }
+        .moderate { background-color: #fd7e14; color: white; }
+        .poor { background-color: #dc3545; color: white; }
+        .very-poor { background-color: #6f42c1; color: white; }
+        .forecast-card {
+            background-color: var(--bs-dark);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        .forecast-card:hover {
+            background-color: var(--bs-success);
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <section class="py-4 m-3">
+        <div class="container my-4">
+        <h1 class="text-center mb-4">Current Weather</h1>
+        <p class="text-center mb-4">Enter a city and country to get the current weather and air quality index.</p>
+        <form id="weatherForm" class="needs-validation mb-4" novalidate>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <input type="text" id="city" class="form-control" placeholder="City" required>
+                    <div class="invalid-feedback">Please enter a city.</div>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" id="state" class="form-control" placeholder="State">
+                </div>
+                <div class="col-md-4">
+                    <input type="text" id="country" class="form-control" placeholder="Country" required>
+                    <div class="invalid-feedback">Please enter a country.</div>
+                </div>
+            </div>
+            <div class="d-grid gap-2 col-md-6 mx-auto mt-3">
+                <button type="submit" class="btn btn-success btn-lg rounded-4">Get Weather</button>
+            </div>
+        </form>
+        <div id="weatherResult" class="mt-4"></div>
+    </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const weatherForm = document.getElementById('weatherForm');
+            const weatherResult = document.getElementById('weatherResult');
+
+            weatherForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const city = document.getElementById('city').value;
+                const state = document.getElementById('state').value;
+                const country = document.getElementById('country').value;
+
+                try {
+                    const response = await fetch('{{url_for('user.weather')}}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ city, state, country }),
+                    });
+
+                    const data = await response.json();
+
+                    if (data.error) {
+                        weatherResult.innerHTML = `<div class="alert alert-danger" role="alert">Error: ${data.error}</div>`;
+                    } else {
+                        const weather = data.weather;
+                        const aqiData = data.aqi.list[0];
+                        const forecast = data.forecast;
+
+                        // Current Weather Data
+                        const temperature = weather.main.temp;
+                        const feelsLike = weather.main.feels_like;
+                        const pressure = weather.main.pressure;
+                        const visibility = weather.visibility / 1000; // Convert to km
+
+                        // AQI and Pollutants
+                        const aqi = aqiData.main.aqi;
+                        const pm2_5 = aqiData.components.pm2_5;
+                        const pm10 = aqiData.components.pm10;
+                        const co = aqiData.components.co;
+                        const no2 = aqiData.components.no2;
+                        const o3 = aqiData.components.o3;
+                        const so2 = aqiData.components.so2;
+
+                        let aqiClass = '';
+                        let aqiText = '';
+
+                        switch (aqi) {
+                            case 1:
+                                aqiClass = 'good';
+                                aqiText = 'Good';
+                                break;
+                            case 2:
+                                aqiClass = 'fair';
+                                aqiText = 'Fair';
+                                break;
+                            case 3:
+                                aqiClass = 'moderate';
+                                aqiText = 'Moderate';
+                                break;
+                            case 4:
+                                aqiClass = 'poor';
+                                aqiText = 'Poor';
+                                break;
+                            case 5:
+                                aqiClass = 'very-poor';
+                                aqiText = 'Very Poor';
+                                break;
+                        }
+
+                        // Process 3-hour forecast data
+                        let dailyForecasts = {};
+                        forecast.list.forEach(entry => {
+                            const date = new Date(entry.dt * 1000).toLocaleDateString();
+                            if (!dailyForecasts[date]) {
+                                dailyForecasts[date] = {
+                                    temp_min: entry.main.temp_min,
+                                    temp_max: entry.main.temp_max,
+                                    description: entry.weather[0].description,
+                                    icon: entry.weather[0].icon
+                                };
+                            } else {
+                                dailyForecasts[date].temp_min = Math.min(dailyForecasts[date].temp_min, entry.main.temp_min);
+                                dailyForecasts[date].temp_max = Math.max(dailyForecasts[date].temp_max, entry.main.temp_max);
+                            }
+                        });
+
+                        // Display the aggregated daily forecast
+                        let forecastHTML = '<h3 class="text-center mb-4">5-Day Forecast</h3><div class="row">';
+                        for (const [date, forecast] of Object.entries(dailyForecasts)) {
+                            forecastHTML += `
+                                <div class="col-md-4 col-lg-2 mb-3">
+                                    <div class="forecast-card p-3 text-center">
+                                        <p class="mb-2"><strong>${date}</strong></p>
+                                        <hr/>
+                                        <img src="https://openweathermap.org/img/wn/${forecast.icon}@2x.png" alt="${forecast.description}">
+                                        <p class="mb-1">${forecast.description}</p>
+                                        <p class="mb-0">Min: ${forecast.temp_min.toFixed(1)}°C</p>
+                                        <p class="mb-0">Max: ${forecast.temp_max.toFixed(1)}°C</p>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                        forecastHTML += '</div>';
+
+                        // Weather Result HTML
+                        weatherResult.innerHTML = `
+                            <div class="weather-card p-4 mb-4">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3 text-center card">
+                                        <h2 class="mb-3 display-5 text-center card-title">${weather.name}, ${weather.sys.country}</h2>
+                                        <hr/>
+                                        <div class="weather-icon">
+                                            <i class="fas fa-${getWeatherIcon(weather.weather[0].id)}"></i>
+                                        </div>
+                                        <p class="h3 mb-3">${temperature.toFixed(1)}°C</p>
+                                        <p class="mb-2">Feels like: ${feelsLike.toFixed(1)}°C</p>
+                                        <p class="mb-2">${weather.weather[0].description}</p>
+                                        <p class="mb-1">Pressure: ${pressure} hPa</p>
+                                        <p class="mb-1">Visibility: ${visibility} km</p>
+                                        <p class="mb-1">Humidity: ${weather.main.humidity}%</p>
+                                        <p class="mb-1">Wind Speed: ${weather.wind.speed} m/s</p>
+                                    </div>
+                                    <div class="col-md-6 mb-3 text-center card">
+                                        <h3 class="mb-3 display-5 text-center card-title">Air Quality</h3>
+                                        <hr/>
+                                        <p class="mb-3">Air Quality Index: <span class="aqi-indicator ${aqiClass}">${aqiText}</span></p>
+                                        <p class="mb-2">PM2.5: ${pm2_5.toFixed(2)} µg/m³</p>
+                                        <p class="mb-2">PM10: ${pm10.toFixed(2)} µg/m³</p>
+                                        <p class="mb-2">CO: ${co.toFixed(2)} µg/m³</p>
+                                        <p class="mb-2">NO2: ${no2.toFixed(2)} µg/m³</p>
+                                        <p class="mb-2">O3: ${o3.toFixed(2)} µg/m³</p>
+                                        <p class="mb-2">SO2: ${so2.toFixed(2)} µg/m³</p>
+                                    </div>
+                                </div>
+                            </div>
+                            ${forecastHTML}
+                        `;
+                    }
+                } catch (error) {
+                    weatherResult.innerHTML = `<div class="alert alert-danger" role="alert">Error: Unable to fetch weather data</div>`;
+                }
+            });
+
+            function getWeatherIcon(weatherId) {
+                if (weatherId >= 200 && weatherId < 300) return 'bolt';
+                if (weatherId >= 300 && weatherId < 500) return 'cloud-rain';
+                if (weatherId >= 500 && weatherId < 600) return 'cloud-showers-heavy';
+                if (weatherId >= 600 && weatherId < 700) return 'snowflake';
+                if (weatherId >= 700 && weatherId < 800) return 'smog';
+                if (weatherId === 800) return 'sun';
+                if (weatherId > 800) return 'cloud';
+                return 'question';
+            }
+        });
+    </script>
+{% endblock %}
