@@ -4,18 +4,21 @@ from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from datetime import datetime
-from itsdangerous import TimedSerializer as Serializer
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app
+
 
 @login.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
 
 class Role(db.Model):
     __tablename__ = 'roles'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
     users = db.relationship('User', backref='role', lazy='dynamic')
+
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -57,6 +60,7 @@ class User(UserMixin, db.Model):
             return None
         return User.query.get(user_id)
 
+
 class Address(db.Model):
     __tablename__ = 'addresses'
     id = db.Column(db.Integer, primary_key=True)
@@ -65,6 +69,10 @@ class Address(db.Model):
     state = db.Column(db.String(64))
     country = db.Column(db.String(64))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    def __repr__(self):
+        return f'<Address {self.city}, {self.state}, {self.country}>'
+
 
 class Activity(db.Model):
     __tablename__ = 'activities'
@@ -75,6 +83,7 @@ class Activity(db.Model):
     carbon_impact = db.Column(db.Float)
     date = db.Column(db.Date, default=datetime.utcnow)
 
+
 class Recommendation(db.Model):
     __tablename__ = 'recommendations'
     id = db.Column(db.Integer, primary_key=True)
@@ -82,6 +91,7 @@ class Recommendation(db.Model):
     description = db.Column(db.String(500))
     impact = db.Column(db.Float)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
 
 class Contact(db.Model):
     __tablename__ = 'contacts'
@@ -94,6 +104,7 @@ class Contact(db.Model):
     def __repr__(self):
         return f'<Contact {self.name}>'
 
+
 class UserChallenges(db.Model):
     __tablename__ = 'user_challenges'
     id = db.Column(db.Integer, primary_key=True)
@@ -101,11 +112,13 @@ class UserChallenges(db.Model):
     challenge_id = db.Column(db.Integer, db.ForeignKey('eco_challenges.id'))
     eco_challenge = db.relationship('EcoChallenges', backref='user_challenges', lazy=True)
 
+
 class CarbonFootprint(db.Model):
     __tablename__ = 'carbon_footprints'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     footprint = db.Column(db.Float)
+
 
 class EcoChallenges(db.Model):
     __tablename__ = 'eco_challenges'
