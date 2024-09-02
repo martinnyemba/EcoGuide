@@ -14,6 +14,7 @@ def load_user(user_id):
 
 
 class Role(db.Model):
+    """Model for User Roles"""
     __tablename__ = 'roles'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
@@ -21,6 +22,7 @@ class Role(db.Model):
 
 
 class User(UserMixin, db.Model):
+    """Model for User Accounts and Profiles"""
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
@@ -42,17 +44,21 @@ class User(UserMixin, db.Model):
         return f'<User {self.username}, Email: {self.email}, Name: {self.first_name} {self.last_name}>'
 
     def set_password(self, password):
+        """Set a hashed password for the user."""
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
+        """Check if the provided password matches the stored hashed password."""
         return check_password_hash(self.password_hash, password)
 
     def get_reset_token(self, expires_sec=1800):
+        """Generate and return a reset token for the user."""
         s = Serializer(current_app.config['SECRET_KEY'], expires_sec)
         return s.dumps({'user_id': self.id}).decode('utf-8')
 
     @staticmethod
     def verify_reset_token(token):
+        """Verify the reset token and return the user if valid."""
         s = Serializer(current_app.config['SECRET_KEY'])
         try:
             user_id = s.loads(token)['user_id']
@@ -62,6 +68,7 @@ class User(UserMixin, db.Model):
 
 
 class Address(db.Model):
+    """Model for User Addresses"""
     __tablename__ = 'addresses'
     id = db.Column(db.Integer, primary_key=True)
     street = db.Column(db.String(128))
@@ -71,10 +78,12 @@ class Address(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     def __repr__(self):
+        """Return a string representation of the address."""
         return f'<Address {self.city}, {self.state}, {self.country}>'
 
 
 class Activity(db.Model):
+    """Model for User Activities"""
     __tablename__ = 'activities'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -85,6 +94,7 @@ class Activity(db.Model):
 
 
 class Recommendation(db.Model):
+    """Model for User Recommendations"""
     __tablename__ = 'recommendations'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
@@ -94,6 +104,7 @@ class Recommendation(db.Model):
 
 
 class Contact(db.Model):
+    """Model for Contact Form"""
     __tablename__ = 'contacts'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=True)
@@ -102,10 +113,12 @@ class Contact(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     def __repr__(self):
+        """Return a string representation of the contact."""
         return f'<Contact {self.name}>'
 
 
 class UserChallenges(db.Model):
+    """Model for User Challenges"""
     __tablename__ = 'user_challenges'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -114,6 +127,7 @@ class UserChallenges(db.Model):
 
 
 class CarbonFootprint(db.Model):
+    """Model for User Carbon Footprints"""
     __tablename__ = 'carbon_footprints'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -121,6 +135,7 @@ class CarbonFootprint(db.Model):
 
 
 class EcoChallenges(db.Model):
+    """Model for Eco Challenges"""
     __tablename__ = 'eco_challenges'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
