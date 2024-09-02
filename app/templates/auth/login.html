@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}
+	Login
+{% endblock %}
+{% block content %}
+	<section class="container my-4" style="font-family: Rubik, sans-serif;">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-8 col-lg-6">
+                    <div class="content-section p-4">
+                        <form method="POST" action="">
+                            {{ form.hidden_tag() }}
+                            <fieldset class="form-group">
+                                <legend class="fs-1 fw-bold text-success border-bottom mb-4 text-center">Log In</legend>
+                                <p class="text-center py-2">Enter your account details to sign in</p>
+                                <div class="form-group mb-3"><span> {{ form.email.label(class="form-control-label") }} {{ form.email(class="form-control form-control-lg rounded-4") }} </span></div>
+                                <div class="form-group mb-3"><span> {{ form.password.label(class="form-control-label") }} {{ form.password(class="form-control form-control-lg rounded-4") }} </span></div>
+                                <div class="form-check mb-3"><span> {{ form.remember(class="form-check-input") }} {{ form.remember.label(class="form-check-label") }} </span></div>
+                            </fieldset>
+                            <div class="form-group my-3 text-center">
+                                <span class="mb-3"> {{ form.submit(class="btn btn-outline-success w-100 p-2 rounded-5") }} </span>
+                                <small class="text-muted mt-3 "><a href="{{ url_for('auth.reset_request') }}">Forgot Password?</a></small>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="border-top p-3 mt-3 text-center"><small class="text-muted"> Need An Account? <a class="ml-2" href="{{ url_for('auth.register') }}">Sign Up Now</a></small></div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

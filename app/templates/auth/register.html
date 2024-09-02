@@ -2,3 +2,31 @@
 {% block title %}
 	{{ title }}
 {% endblock %}
+{% block content %}
+	<section class="container my-4">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-8 col-lg-6">
+                    <div class="content-section py-4">
+                        <form method="POST" action="">
+                            {{ form.hidden_tag() }}
+                            <fieldset class="form-group">
+                                <legend class="fs-1 fw-bold text-success border-bottom mb-4 text-center">Sign Up</legend>
+                                <p class="text-center">Join Today! Enter your details to register</p>
+                                <div class="form-group m-2"><span> {{ form.username.label(class="form-control-label") }} {{ form.username(class="form-control form-control-lg rounded-4") }} </span></div>
+                                <div class="form-group m-2"><span> {{ form.email.label(class="form-control-label") }} {{ form.email(class="form-control form-control-lg rounded-4") }} </span></div>
+                                <div class="form-group m-2"><span> {{ form.first_name.label(class="form-control-label") }} {{ form.first_name(class="form-control form-control-lg rounded-4") }} </span></div>
+                                <div class="form-group m-2"><span> {{ form.last_name.label(class="form-control-label") }} {{ form.last_name(class="form-control form-control-lg rounded-4") }} </span></div>
+                                <div class="form-group m-2"><span> {{ form.phone_number.label(class="form-control-label") }} {{ form.phone_number(class="form-control form-control-lg rounded-4") }} </span></div>
+                                <div class="form-group m-2"><span> {{ form.password.label(class="form-control-label") }} {{ form.password(class="form-control form-control-lg rounded-4") }} </span></div>
+                                <div class="form-group m-2"><span> {{ form.confirm_password.label(class="form-control-label") }} {{ form.confirm_password(class="form-control form-control-lg rounded-4") }} </span></div>
+                            </fieldset>
+                            <div class="form-group m-2 text-center"><span> {{ form.submit(class="btn btn-outline-success rounded-5 p-2 w-100") }} </span></div>
+                        </form>
+                    </div>
+                    <div class="border-top pt-3 py-4 text-center"><small class="text-muted"> Already Have An Account? <a class="ml-2" href="{{ url_for('auth.login') }}">Sign In</a></small></div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

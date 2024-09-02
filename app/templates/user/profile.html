@@ -1,0 +1,263 @@
+{% extends 'base.html' %}
+{% block title %}
+	{{ current_user.username }}
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .profile-container {
+          border-radius: 15px;
+          box-shadow: 0 0 20px rgba(0,0,0,0.1);
+          padding: 20px;
+          margin-top: 20px;
+          transition: all 0.3s ease;
+          background: var(--bs-dark);
+        }
+
+        .profile-header {
+          text-align: center;
+          margin-bottom: 20px;
+        }
+
+        .profile-picture {
+          width: 100px;
+          height: 100px;
+          border-radius: 50%;
+          object-fit: cover;
+          margin-bottom: 15px;
+          transition: all 0.3s ease;
+        }
+
+        .nav-tabs {
+          border-bottom: none;
+        }
+
+        .nav-tabs .nav-link {
+          color: #495057;
+          border: none;
+          padding: 10px 15px;
+          border-radius: 20px;
+          transition: all 0.3s ease;
+        }
+
+        .nav-tabs .nav-link.active {
+          font-weight: bold;
+          color: #fff;
+          background-color: var(--bs-success);
+        }
+
+        .tab-content {
+          padding-top: 20px;
+        }
+
+        .btn-primary {
+          background-color: var(--bs-primary);
+          border-color: #007bff;
+          border-radius: 20px;
+          padding: 8px 20px;
+          transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+          background-color: var(--bs-success);
+          border-color: #0056b3;
+          transform: translateY(-2px);
+        }
+
+        .profile-info {
+          border-radius: 10px;
+          padding: 15px;
+          margin-bottom: 20px;
+          background: var(--bs-body-bg);
+        }
+
+        .profile-info h3 {
+          margin-bottom: 15px;
+          color: var(--bs-success);
+        }
+
+        .form-control {
+          border-radius: 20px;
+        }
+
+        .form-control:focus {
+          box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+
+        .fade-in {
+          animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .profile-container {
+            padding: 15px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .profile-picture {
+            width: 100px;
+            height: 100px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .nav-tabs .nav-link {
+            padding: 8px 12px;
+            font-size: 0.9rem;
+          }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <section class="py-4">
+        <div class="container py-4">
+            <div class="row justify-content-center">
+                <div class="col-sm-12 col-md-10 col-lg-8">
+                    <div class="profile-container">
+                        <div class="profile-header"><img src="{{ url_for('static', filename='assets/img/user.png') }}" alt="Profile Picture" class="profile-picture" id="profilePicture">
+                            <h2>{{ current_user.username }}</h2>
+                            <p>{{ current_user.email }}</p>
+                        </div>
+                        <ul class="nav nav-tabs justify-content-center" id="profileTabs" role="tablist">
+                            <li class="nav-item" role="presentation"><button class="active nav-link" id="view-profile-tab" data-bs-toggle="tab" data-bs-target="#view-profile" type="button" role="tab" aria-controls="view-profile" aria-selected="true"><i class="bi bi-person"></i><span class="d-none d-sm-inline">View Profile</span></button></li>
+                            <li class="nav-item" role="presentation"><button id="update-profile-tab" class="nav-link" data-bs-toggle="tab" data-bs-target="#update-profile" type="button" role="tab" aria-controls="update-profile" aria-selected="false"><i class="bi bi-person-fill"></i><span class="d-none d-sm-inline">Update Profile</span></button></li>
+                            <li class="nav-item" role="presentation"><button class="nav-link" id="password-tab" data-bs-toggle="tab" data-bs-target="#password" type="button" role="tab" aria-controls="password" aria-selected="false"><i class="bi bi-key-fill"></i><span class="d-none d-sm-inline">Password</span></button></li>
+                            <li class="nav-item" role="presentation"><button class="nav-link" id="address-tab" data-bs-toggle="tab" data-bs-target="#address" type="button" role="tab" aria-controls="address" aria-selected="false"><i class="bi bi-geo-alt-fill"></i><span class="d-none d-sm-inline">Address</span></button></li>
+                        </ul>
+                        <div class="tab-content" id="profileTabsContent">
+                            <div class="tab-pane fade show active" id="view-profile" role="tabpanel" aria-labelledby="view-profile-tab">
+                                <div class="profile-info fade-in py-4">
+                                    <h3 class="display-5 text-center">Personal Information</h3>
+                                    <p><strong>Username:</strong><span id="username">{{ current_user.username }}</span></p>
+                                    <p><strong>Email:</strong><span id="email">{{ current_user.email }}</span></p>
+                                    <p><strong>First Name:</strong><span id="firstName">{{ current_user.first_name }}</span></p>
+                                    <p><strong>Last Name:</strong><span id="lastName">{{ current_user.last_name }}</span></p>
+                                    <p><strong>Phone Number:</strong><span id="phoneNumber">{{ current_user.phone_number or 'Not provided' }}</span></p>
+                                </div>
+                                <div class="profile-info fade-in py-4">
+                                    <h3 class="display-5 text-center">Address Information</h3>
+                                    <p><strong>Street: </strong><span id="username">{{ current_user.address.street }}</span></p>
+                                    <p><strong>City: </strong><span id="email">{{ current_user.address.city }}</span></p>
+                                    <p><strong>State: </strong><span id="firstName">{{ current_user.address.state }}</span></p>
+                                    <p><strong>Country: </strong><span id="lastName">{{ current_user.address.country }}</span></p>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="update-profile" role="tabpanel" aria-labelledby="update-profile-tab">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form method="POST" action="{{ url_for('user.update_profile') }}" id="updateProfileForm" class="fade-in"><span> {{ update_profile_form.hidden_tag() }} </span>
+                                            <div class="mb-3"><span> {{ update_profile_form.username.label(class="form-label") }} {{ update_profile_form.username(class="form-control", placeholder="Enter your username") }} </span></div>
+                                            <div class="mb-3"><span> {{ update_profile_form.email.label(class="form-label") }} {{ update_profile_form.email(class="form-control", placeholder="Enter your email") }} </span></div>
+                                            <div class="mb-3"><span> {{ update_profile_form.first_name.label(class="form-label") }} {{ update_profile_form.first_name(class="form-control", placeholder="Enter your first name") }} </span></div>
+                                            <div class="mb-3"><span> {{ update_profile_form.last_name.label(class="form-label") }} {{ update_profile_form.last_name(class="form-control", placeholder="Enter your last name") }} </span></div>
+                                            <div class="mb-3"><span> {{ update_profile_form.phone_number.label(class="form-label") }} {{ update_profile_form.phone_number(class="form-control", placeholder="Enter your phone number") }} </span></div>
+                                            <hr class="py-2"><span> {{ update_profile_form.submit(class="btn btn-primary text-center w-100") }} </span>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="password-tab">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form method="POST" action="{{ url_for('user.change_password') }}" class="fade-in"><span> {{ change_password_form.hidden_tag() }} </span>
+                                            <div class="mb-3"><span> {{ change_password_form.current_password.label(class="form-label") }} {{ change_password_form.current_password(class="form-control", placeholder="Enter your current password") }} </span></div>
+                                            <div class="mb-3"><span> {{ change_password_form.new_password.label(class="form-label") }} {{ change_password_form.new_password(class="form-control", placeholder="Enter your new password") }} </span></div>
+                                            <div class="mb-3"><span> {{ change_password_form.confirm_password.label(class="form-label") }} {{ change_password_form.confirm_password(class="form-control", placeholder="Confirm your new password") }} </span></div>
+                                            <span> {{ change_password_form.submit(class="btn btn-primary text-center w-100") }} </span>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form method="POST" action="{{ url_for('user.update_address') }}" class="fade-in"><span> {{ update_address_form.hidden_tag() }} </span>
+                                            <div class="mb-3"><span> {{ update_address_form.street.label(class="form-label") }} {{ update_address_form.street(class="form-control", placeholder="Enter your street address") }} </span></div>
+                                            <div class="mb-3"><span> {{ update_address_form.city.label(class="form-label") }} {{ update_address_form.city(class="form-control", placeholder="Enter your city") }} </span></div>
+                                            <div class="mb-3"><span> {{ update_address_form.state.label(class="form-label") }} {{ update_address_form.state(class="form-control", placeholder="Enter your state") }} </span></div>
+                                            <div class="mb-3"><span> {{ update_address_form.country.label(class="form-label") }} {{ update_address_form.country(class="form-control", placeholder="Enter your country") }} </span></div>
+                                            <span> {{ update_address_form.submit(class="btn btn-primary text-center w-100") }} </span>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        // Function to update profile information
+        function updateProfileInfo() {
+            const form = document.getElementById('updateProfileForm');
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update the view profile section
+                    document.getElementById('username').textContent = data.username;
+                    document.getElementById('email').textContent = data.email;
+                    document.getElementById('firstName').textContent = data.first_name;
+                    document.getElementById('lastName').textContent = data.last_name;
+                    document.getElementById('phoneNumber').textContent = data.phone_number || 'Not provided';
+
+                    // Show success message
+                    alert('Profile updated successfully!');
+                } else {
+                    alert('Failed to update profile. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        }
+
+        // Add event listener to update profile form
+        document.getElementById('updateProfileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            updateProfileInfo();
+        });
+
+        // Add animation to profile picture
+        document.getElementById('profilePicture').addEventListener('mouseover', function() {
+            this.style.transform = 'scale(1.1)';
+        });
+
+        document.getElementById('profilePicture').addEventListener('mouseout', function() {
+            this.style.transform = 'scale(1)';
+        });
+
+        // Add fade-in animation to tab content
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                document.querySelectorAll('.tab-pane').forEach(pane => {
+                    pane.classList.remove('fade-in');
+                });
+                setTimeout(() => {
+                    document.querySelector(this.dataset.bsTarget).classList.add('fade-in');
+                }, 50);
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}
+	Login
+{% endblock %}
+{% block content %}
+	<section class="container my-4" style="font-family: Rubik, sans-serif;">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-8 col-lg-6">
+                    <div class="content-section p-4">
+                        <form method="POST" action="">
+                            {{ form.hidden_tag() }}
+                            <fieldset class="form-group">
+                                <legend class="border-bottom mb-4">Reset Password</legend>
+                                <div class="form-group mb-3">
+                                    {{ form.password.label(class="form-control-label") }}
+                                    {{ form.password(class="form-control form-control-lg") }}
+                                </div>
+                                <div class="form-group mb-3">
+                                    {{ form.confirm_password.label(class="form-control-label") }}
+                                    {{ form.confirm_password(class="form-control form-control-lg") }}
+                                </div>
+                            </fieldset>
+                            <div class="form-group">
+                                {{ form.submit(class="btn btn-outline-info") }}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
