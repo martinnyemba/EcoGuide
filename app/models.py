@@ -44,11 +44,9 @@ class User(UserMixin, db.Model):
         return f'<User {self.username}, Email: {self.email}, Name: {self.first_name} {self.last_name}>'
 
     def set_password(self, password):
-        """Set a hashed password for the user."""
-        self.password_hash = generate_password_hash(password, method='pbkdf2:sha256', salt_length=8)
+        self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
-        """Check if the provided password matches the stored hashed password."""
         return check_password_hash(self.password_hash, password)
 
     def get_reset_token(self, expires_sec=1800):

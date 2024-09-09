@@ -1,12 +1,14 @@
 import os
 from dotenv import load_dotenv
-import uuid
 
 load_dotenv()
 
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY') or str(uuid.uuid4())
+    # Secret Key Configuration
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    if not SECRET_KEY:
+        raise ValueError("No SECRET_KEY set for Flask application. This is insecure.")
 
     # Database configuration
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///ecoguide.db'
