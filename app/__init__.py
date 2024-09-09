@@ -29,8 +29,6 @@ def create_app(config_class=Config):
     Registers the blueprints for the main, auth, user, and admin routes.
     Registers the error handlers for 404, 500, and 403 errors.
     Registers the user loader for the login manager.
-    :param config_class:
-    :return: app
     """
     app = Flask(__name__)
     app.config.from_object(config_class)
