@@ -44,8 +44,9 @@ def create_app(config_class=Config):
     # Register error handlers
     @app.errorhandler(Exception)
     def handle_exception(e):
-        app.logger.error(f"Unhandled exception: {str(e)}")
-        return render_template('errors/500.html'), 500
+        app.logger.error(f"Unhandled exception: {str(e)}", exc_info=True)
+        app.logger.exception(e)
+        return render_template('errors/500.html', error=str(e)), 500
 
     @app.errorhandler(TemplateNotFound)
     def handle_template_not_found(error):
@@ -77,5 +78,11 @@ def create_app(config_class=Config):
     app.register_blueprint(auth.bp)
     app.register_blueprint(user.bp)
     app.register_blueprint(admin.bp)
+
+    try:
+        db.create_all()
+    except Exception as e:
+        app.logger.error(f"Error creating database: {str(e)}", exc_info=True)
+        return render_template('errors/500.html', error=str(e)), 500
 
     return app
