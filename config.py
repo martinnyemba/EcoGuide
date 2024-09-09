@@ -11,7 +11,9 @@ class Config:
         raise ValueError("No SECRET_KEY set for Flask application. This is insecure.")
 
     # Database configuration
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///ecoguide.db'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('JAWSDB_MARIA_URL') or ('mysql+pymysql://kbacgzlnvt355vgc:flz36pkp28rlq6fw'
+                                                                 '@uyu7j8yohcwo35j3.cbetxkdyhwsb.us-east-1.rds'
+                                                                 '.amazonaws.com:3306/w66f0g9tyenpt50b')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Email configuration
