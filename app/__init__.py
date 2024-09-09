@@ -29,6 +29,8 @@ def create_app(config_class=Config):
     Registers the blueprints for the main, auth, user, and admin routes.
     Registers the error handlers for 404, 500, and 403 errors.
     Registers the user loader for the login manager.
+    :param config_class:
+    :return: app
     """
     app = Flask(__name__)
     app.config.from_object(config_class)
@@ -42,9 +44,8 @@ def create_app(config_class=Config):
     # Register error handlers
     @app.errorhandler(Exception)
     def handle_exception(e):
-        app.logger.error(f"Unhandled exception: {str(e)}", exc_info=True)
-        app.logger.exception(e)
-        return render_template('errors/500.html', error=str(e)), 500
+        app.logger.error(f"Unhandled exception: {str(e)}")
+        return render_template('errors/500.html'), 500
 
     @app.errorhandler(TemplateNotFound)
     def handle_template_not_found(error):
@@ -77,10 +78,7 @@ def create_app(config_class=Config):
     app.register_blueprint(user.bp)
     app.register_blueprint(admin.bp)
 
-    try:
+    with app.app_context():
         db.create_all()
-    except Exception as e:
-        app.logger.error(f"Error creating database: {str(e)}", exc_info=True)
-        return render_template('errors/500.html', error=str(e)), 500
 
     return app
