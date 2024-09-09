@@ -50,6 +50,7 @@ def carbon_estimate():
         return jsonify(result)
     return render_template('user/estimates.html', form=form)
 
+
 @bp.route('/impact_calculator')
 @login_required
 def impact_calculator():
@@ -118,6 +119,7 @@ def profile():
                            change_password_form=change_password_form,
                            update_address_form=update_address_form)
 
+
 @bp.route('/update_profile', methods=['POST'])
 @login_required
 def update_profile():
@@ -138,6 +140,7 @@ def update_profile():
             'phone_number': current_user.phone_number or 'Not provided'
         })
     return jsonify({'success': False, 'errors': form.errors}), 400
+
 
 @bp.route('/change_password', methods=['POST'])
 @login_required
@@ -200,4 +203,5 @@ def weather():
 @bp.route('/get_weather', methods=['GET', 'POST'])
 @login_required
 def get_weather():
+    """Get weather data for the user's address"""
     return render_template('user/weather.html')

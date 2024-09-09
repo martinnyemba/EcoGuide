@@ -167,24 +167,52 @@ This section explains the database models used in our application. Below is a de
   - `name`: String(80)
   - `description`: Text
 
-## User Loader
-The `load_user` function is used to load a user by their ID for Flask-Login.
+## Core project structure and main files
 
-## Password Management
-The `User` model includes methods for setting and checking passwords, as well as generating and verifying password reset tokens.
-
-## Token Management
-The `User` model includes methods for generating and verifying password reset tokens using `itsdangerous.TimedSerializer`.
-
-## Contact
-The `Contact` model is used to store contact messages from users, including their name, email, message, and timestamp.
-
-## Usage
-To use these models, import the `db` object from your application and create the tables using `db.create_all()`.
-
-```python
-from app import db
-db.create_all()
+```
+ecoguide/
+│
+├── app/
+│   ├── __init__.py
+│   ├── models.py
+│   ├── routes/
+│   │   ├── __init__.py
+│   │   ├── main.py
+│   │   ├── auth.py
+│   │   ├── user.py
+│   │   └── admin.py
+│   ├── static/
+│   │   ├── assets/
+|   │       ├──js/
+|   │       ├──css/
+|   │       ├──img/
+|   │       ├──bootstrap/
+│   │   
+│   ├── templates/
+│   │   ├── base.html
+│   │   ├── index.html
+|   │   ├── contact.html
+|   │   ├── features.html
+|   │   ├── how-it-works.html
+|   │   ├── errors/
+│   │   ├── auth/
+│   │   ├── user/
+│   │   └── admin/
+│   ├── forms.py
+|   ├── weather.py
+│   ├── carbon_interface.py
+│   └── utils.py
+│
+├── screeenshots/
+├── tests/
+├── migrations/
+├── instance/
+├── config.py
+├── requirements.txt
+├── .env
+├── .gitignore
+└── Procfile
+└── run.py
 ```
 
 ## Team

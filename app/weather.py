@@ -3,6 +3,10 @@ from flask import current_app
 
 
 def get_weather_and_aqi(city, state, country):
+    """
+    Returns weather, Air Quality Index (AQI), and 3-hour interval
+    forecast data for a given location.
+    """
     api_key = current_app.config['OPENWEATHERMAP_API_KEY']
 
     # Base URLs for different OpenWeatherMap API endpoints

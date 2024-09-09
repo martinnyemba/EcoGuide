@@ -1,14 +1,13 @@
 # app/utils.py
-from flask import abort, url_for, current_app, request, render_template
-from flask_login import current_user
+from flask import url_for, request, render_template
 from flask_mail import Message
 from markupsafe import Markup
-
+from itsdangerous import URLSafeTimedSerializer as Serializer
 from app import mail
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 
 def send_reset_email(user):
+    """Email the user with a link to reset their password """
     token = user.get_reset_token()
     msg = Message('Password Reset Request',
                   sender='emtechmediapro@gmail.com',
@@ -22,6 +21,7 @@ If you did not make this request then simply ignore this email and no changes wi
 
 
 def send_email(subject, sender, recipients, text_body, html_body):
+    """Send an email to the user """
     msg = Message(subject, sender=sender, recipients=recipients)
     msg.body = text_body
     msg.html = html_body
@@ -40,7 +40,9 @@ def render_pagination(pagination, endpoint, **kwargs):
             page_urls.append((None, None))
     return Markup(render_template('_pagination.html', pagination=pagination, page_urls=page_urls))
 
+
 def calculate_footprint(data):
+    """ Calculate the carbon footprint based on the user's input """
     # Convert form data to float
     electricity = float(data['electricity'])
     gas = float(data['gas'])
