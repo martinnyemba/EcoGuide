@@ -1,10 +1,11 @@
+from datetime import datetime, timezone
+from sqlalchemy.orm import validates
+from email_validator import validate_email, EmailNotValidError
+from app import db, login
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer as Serializer
 from flask import current_app
-from datetime import datetime, timezone
-from sqlalchemy.orm import validates
-from . import db, login
 
 
 @login.user_loader
@@ -17,6 +18,19 @@ class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True, index=True)
     users = db.relationship('User', backref='role', lazy='dynamic', cascade='all, delete-orphan')
+
+    @staticmethod
+    def insert_roles():
+        roles = {
+            'User': 1,
+            'Admin': 2
+        }
+        for role_name, role_id in roles.items():
+            role = Role.query.filter_by(id=role_id).first()
+            if role is None:
+                role = Role(id=role_id, name=role_name)
+            db.session.add(role)
+        db.session.commit()
 
     def __repr__(self):
         return f'<Role {self.name}>'
@@ -31,7 +45,7 @@ class User(UserMixin, db.Model):
     first_name = db.Column(db.String(64))
     last_name = db.Column(db.String(64))
     phone_number = db.Column(db.String(20))
-    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), default=1)
     activities = db.relationship('Activity', backref='user', lazy='dynamic', cascade='all, delete-orphan')
     recommendations = db.relationship('Recommendation', backref='user', lazy=True, cascade='all, delete-orphan')
     user_challenges = db.relationship('UserChallenges', backref='user', lazy=True, cascade='all, delete-orphan')
@@ -45,20 +59,24 @@ class User(UserMixin, db.Model):
         return address
 
     def __repr__(self):
-        return f'<User {self.username}>'
+        return f'<User {self.username}, Email: {self.email}, Name: {self.first_name} {self.last_name}>'
 
     def set_password(self, password):
+        """Set a hashed password for the user."""
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
+        """Check if the provided password matches the stored hashed password."""
         return check_password_hash(self.password_hash, password)
 
     def get_reset_token(self, expires_sec=1800):
+        """Generate and return a reset token for the user."""
         s = Serializer(current_app.config['SECRET_KEY'], expires_sec)
         return s.dumps({'user_id': self.id}).decode('utf-8')
 
     @staticmethod
     def verify_reset_token(token):
+        """Verify the reset token and return the user if valid."""
         s = Serializer(current_app.config['SECRET_KEY'])
         try:
             user_id = s.loads(token)['user_id']

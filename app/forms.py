@@ -1,17 +1,17 @@
-# app/forms.py
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
-    SelectField, DateTimeField, FloatField, IntegerField
+    SelectField, FloatField, IntegerField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, \
     Length, Optional
 from app.models import User, Address
+import re
 
 
 class RegistrationForm(FlaskForm):
     """Form for users to register an account."""
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     first_name = StringField('First Name', validators=[DataRequired()])
     last_name = StringField('Last Name', validators=[DataRequired()])
@@ -19,9 +19,9 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Sign Up')
 
     def validate_username(self, username):
-        """Validate that the username is unique."""
-        if not username.data.isalnum():
-            raise ValidationError('Username can only contain alphanumeric characters.')
+        """Validate that the username is unique and follows security guidelines."""
+        if not re.match(r'^[\w.-]+$', username.data):
+            raise ValidationError('Username can only contain letters, numbers, dots, and underscores.')
         user = User.query.filter_by(username=username.data).first()
         if user:
             raise ValidationError('That username is taken. Please choose a different one.')
@@ -55,12 +55,11 @@ class RequestResetForm(FlaskForm):
 
 class ResetPasswordForm(FlaskForm):
     """Form for users to reset their password."""
-    password = PasswordField('New Password', validators=[DataRequired()])
+    password = PasswordField('New Password', validators=[DataRequired(), Length(min=8)])
     confirm_password = PasswordField('Confirm New Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Reset Password')
 
 
-# User Forms
 class UpdateProfileForm(FlaskForm):
     """Form for users to update their profile."""
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
@@ -74,7 +73,7 @@ class UpdateProfileForm(FlaskForm):
 class ChangePasswordForm(FlaskForm):
     """Form for users to change their password."""
     current_password = PasswordField('Current Password', validators=[DataRequired()])
-    new_password = PasswordField('New Password', validators=[DataRequired(), Length(min=6)])
+    new_password = PasswordField('New Password', validators=[DataRequired(), Length(min=8)])
     confirm_password = PasswordField('Confirm New Password', validators=[DataRequired(), EqualTo('new_password')])
     submit = SubmitField('Change Password')
 
@@ -88,7 +87,6 @@ class UpdateAddressForm(FlaskForm):
     submit = SubmitField('Update Address')
 
 
-# Forms for Carbon Interface API
 class EstimateForm(FlaskForm):
     """Form for users to calculate their carbon footprint."""
     estimate_type = SelectField('Estimate Type', choices=[
@@ -122,3 +120,5 @@ class EstimateForm(FlaskForm):
     vehicle_make = StringField('Vehicle Make', validators=[Optional()])
     vehicle_model = StringField('Vehicle Model', validators=[Optional()])
     vehicle_year = IntegerField('Vehicle Year', validators=[Optional()])
+
+    submit = SubmitField('Calculate')

@@ -1,6 +1,11 @@
+#!/usr/bin/env python
+"""
+Blueprint for user authentication routes
+"""
+import secrets
 from flask import Blueprint, render_template, url_for, flash, redirect, request
 from flask_login import login_user, current_user, logout_user, login_required
-from app import db, bcrypt
+from app import db
 from app.models import User
 from app.forms import RegistrationForm, LoginForm, RequestResetForm, ResetPasswordForm
 from app.utils import send_reset_email
@@ -14,9 +19,10 @@ def register():
         return redirect(url_for('main.index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, password_hash=hashed_password,
-                    first_name=form.first_name.data, last_name=form.last_name.data, phone_number=form.phone_number.data)
+        user = User(username=form.username.data, email=form.email.data,
+                    first_name=form.first_name.data, last_name=form.last_name.data,
+                    phone_number=form.phone_number.data)
+        user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
         flash('Your account has been created! You are now able to log in', 'success')
@@ -26,26 +32,12 @@ def register():
 
 @bp.route("/login", methods=['GET', 'POST'])
 def login():
-    """
-    This function handles user login. If the user is already authenticated, they are redirected to the home page.
-    If the form is submitted and valid, the function checks if the user exists and the password is correct.
-    If successful, the user is logged in and redirected to the home page or the next page if provided.
-    If unsuccessful, a flash message is displayed.
-
-    Parameters:
-    - methods: A list of HTTP methods this route is accessible with. ['GET', 'POST'] in this case.
-
-    Returns:
-    - A redirect response to the home page if the user is already authenticated.
-    - A render_template response to the login page if the form is not submitted or is invalid.
-    - A redirect response to the home page or the next page if the login is successful.
-    """
     if current_user.is_authenticated:
         return redirect(url_for('user.dashboard'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(user.password_hash, form.password.data):
+        if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('user.dashboard'))
@@ -83,8 +75,7 @@ def reset_token(token):
         return redirect(url_for('auth.reset_request'))
     form = ResetPasswordForm()
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user.password_hash = hashed_password
+        user.set_password(form.password.data)
         db.session.commit()
         flash('Your password has been updated! You are now able to log in', 'success')
         return redirect(url_for('auth.login'))

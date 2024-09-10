@@ -10,7 +10,7 @@ class Config:
     # Database configuration
     HEROKU_POSTGRESQL_WHITE_URL = os.environ.get('HEROKU_POSTGRESQL_WHITE_URL')
     if HEROKU_POSTGRESQL_WHITE_URL and HEROKU_POSTGRESQL_WHITE_URL.startswith("postgres://"):
-        HEROKU_POSTGRESQL_WHITE_URL = HEROKU_POSTGRESQL_WHITE_URL.replace("postgres://", "postgresql://", 1)
+        HEROKU_POSTGRESQL_WHITE_URL = HEROKU_POSTGRESQL_WHITE_URL.replace("postgres://", "postgresql+psycopg2://", 1)
 
     SQLALCHEMY_DATABASE_URI = HEROKU_POSTGRESQL_WHITE_URL or 'sqlite:///ecoguide.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
