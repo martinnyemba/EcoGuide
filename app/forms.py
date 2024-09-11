@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+"""Forms for the user authentication and profile pages."""
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
     SelectField, FloatField, IntegerField
@@ -19,7 +22,7 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Sign Up')
 
     def validate_username(self, username):
-        """Validate that the username is unique and follows security guidelines."""
+        """Function Validate that the username is unique and follows security guidelines."""
         if not re.match(r'^[\w.-]+$', username.data):
             raise ValidationError('Username can only contain letters, numbers, dots, and underscores.')
         user = User.query.filter_by(username=username.data).first()
@@ -27,7 +30,7 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('That username is taken. Please choose a different one.')
 
     def validate_email(self, email):
-        """Validate that the email is unique."""
+        """Function Validate that the email is unique."""
         user = User.query.filter_by(email=email.data).first()
         if user:
             raise ValidationError('That email is taken. Please choose a different one.')

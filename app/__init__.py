@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+"""Module for configuring Flask application instance"""
+
 import os
 import logging
 from logging.handlers import RotatingFileHandler
@@ -19,6 +22,15 @@ csrf = CSRFProtect()
 
 
 def create_app(config_class=Config):
+    """
+    This function creates and configures a Flask application instance.
+
+    Parameters:
+    config_class (Config): An instance of the configuration class. Defaults to Config.
+
+    Returns:
+    app (Flask): The configured Flask application instance.
+    """
     app = Flask(__name__)
     app.config.from_object(config_class)
 

@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+"""
+Database models for the application.
+"""
+
 from datetime import datetime, timezone
 from sqlalchemy.orm import validates
 from email_validator import validate_email, EmailNotValidError
@@ -10,10 +15,12 @@ from flask import current_app
 
 @login.user_loader
 def load_user(user_id):
+    """Return the user object for the given user ID."""
     return User.query.get(int(user_id))
 
 
 class Role(db.Model):
+    """Model for user roles."""
     __tablename__ = 'roles'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True, index=True)
@@ -21,6 +28,7 @@ class Role(db.Model):
 
     @staticmethod
     def insert_roles():
+        """Function to Insert the default roles into the database."""
         roles = {
             'User': 1,
             'Admin': 2
@@ -33,10 +41,12 @@ class Role(db.Model):
         db.session.commit()
 
     def __repr__(self):
+        """Return a string representation of the object."""
         return f'<Role {self.name}>'
 
 
 class User(UserMixin, db.Model):
+    """Model for user accounts."""
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
@@ -54,11 +64,13 @@ class User(UserMixin, db.Model):
 
     @validates('email')
     def validate_email(self, key, address):
+        """Validate that the email address is valid."""
         if '@' not in address:
             raise ValueError("Invalid email address")
         return address
 
     def __repr__(self):
+        """Return a string representation of the object."""
         return f'<User {self.username}, Email: {self.email}, Name: {self.first_name} {self.last_name}>'
 
     def set_password(self, password):
@@ -86,6 +98,7 @@ class User(UserMixin, db.Model):
 
 
 class Address(db.Model):
+    """Model for user addresses."""
     __tablename__ = 'addresses'
     id = db.Column(db.Integer, primary_key=True)
     street = db.Column(db.String(128))
@@ -95,10 +108,12 @@ class Address(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     def __repr__(self):
+        """Return a string representation of the object."""
         return f'<Address {self.city}, {self.state}, {self.country}>'
 
 
 class Activity(db.Model):
+    """Model for user activities."""
     __tablename__ = 'activities'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -112,6 +127,7 @@ class Activity(db.Model):
 
 
 class Recommendation(db.Model):
+    """Model for user recommendations."""
     __tablename__ = 'recommendations'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
@@ -120,10 +136,12 @@ class Recommendation(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     def __repr__(self):
+        """Return a string representation of the object."""
         return f'<Recommendation {self.title}>'
 
 
 class Contact(db.Model):
+    """Model for contact form submissions."""
     __tablename__ = 'contacts'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=True)
@@ -136,6 +154,7 @@ class Contact(db.Model):
 
 
 class UserChallenges(db.Model):
+    """Model for user challenges."""
     __tablename__ = 'user_challenges'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -147,20 +166,24 @@ class UserChallenges(db.Model):
 
 
 class CarbonFootprint(db.Model):
+    """Model for user carbon footprints."""
     __tablename__ = 'carbon_footprints'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     footprint = db.Column(db.Float)
 
     def __repr__(self):
+        """Return a string representation of the object."""
         return f'<CarbonFootprint {self.footprint}>'
 
 
 class EcoChallenges(db.Model):
+    """Model for eco challenges."""
     __tablename__ = 'eco_challenges'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
     description = db.Column(db.Text)
 
     def __repr__(self):
+        """Return a string representation of the object."""
         return f'<EcoChallenge {self.name}>'
