@@ -12,8 +12,10 @@ class Config:
     if HEROKU_POSTGRESQL_WHITE_URL and HEROKU_POSTGRESQL_WHITE_URL.startswith("postgres://"):
         HEROKU_POSTGRESQL_WHITE_URL = HEROKU_POSTGRESQL_WHITE_URL.replace("postgres://", "postgresql+psycopg2://", 1)
 
-    SQLALCHEMY_DATABASE_URI = HEROKU_POSTGRESQL_WHITE_URL or 'sqlite:///ecoguide.db'
+    SQLALCHEMY_DATABASE_URI = HEROKU_POSTGRESQL_WHITE_URL or os.environ.get('DATABASE_URL') or 'sqlite:///ecoguide.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    # Docker configuration / Setting for Postgres
 
     # Email configuration
     MAIL_SERVER = 'smtp.gmail.com'

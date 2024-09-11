@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}
+	Settings
+{% endblock %}
+{% block content %}
+	<h1>Settings</h1>
+    <p>Change your settings here.</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+    <h2>Change Password</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ password_form.as_p }}
+        <button type="submit">Change Password</button>
+    </form>
+    <h2>Delete Account</h2>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Delete Account</button>
+    </form>
+{% endblock %}

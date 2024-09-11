@@ -12,7 +12,6 @@ from app.weather import get_weather_and_aqi
 
 bp = Blueprint('user', __name__)
 
-
 # Generate random tips
 tips = [
     "Turn off lights when not in use to save energy.",
@@ -186,6 +185,12 @@ def update_address():
             for error in errors:
                 flash(f"{field.capitalize()}: {error}", 'danger')
     return redirect(url_for('user.profile'))
+
+
+@bp.route('/settings', methods=['GET', 'POST'])
+@login_required
+def settings():
+    return render_template('user/settings.html')
 
 
 @bp.route('/weather', methods=['POST'])
