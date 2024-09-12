@@ -3,5 +3,120 @@
 	Dashboard
 {% endblock %}
 {% block content %}
-	<h1>MY DASHBOARD</h1>
+	<div class="container py-5">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1>{{current_user.username.capitalize()}}, Welcome to EcoGuide</h1>
+                <p>Empower your life with eco-friendly choices. Start making a difference, one small step at a time</p>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-md-4 my-2" data-aos="fade-up" data-aos-delay="100">
+                <div class="card text-center m-1 rounded-5 py-sm-4">
+                    <div class="card-body">
+                        <img class="pt-2 w-50" src="{{ url_for('static', filename='assets/img/eco.png') }}">
+                        <p class="card-text">Track&nbsp; and monitor your Carbon Footprint. Calculate the impact of your actions.</p>
+                        <hr>
+                        <a href="{{ url_for('user.calculator') }}" class="btn btn-success btn-sm border rounded-pill card-link" role="button">Carbon Footprinting</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 my-2" data-aos="fade-up" data-aos-delay="150">
+                <div class="card text-center m-1 rounded-5 py-sm-4">
+                    <div class="card-body"><img class="pt-2 w-50" src="{{ url_for('static', filename='assets/img/recycle.png') }}">
+                        <p class="card-text">Calculate the impact of your actions, explore set custom sustainability goals, and track their progress.</p>
+                        <hr>
+                        <a href="{{ url_for('user.sustainability_score') }}" class="btn btn-success btn-sm border rounded-pill card-link" role="button">Sustanability Quiz</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 my-2" data-aos="fade-up" data-aos-delay="200">
+                <div class="card text-center m-1 rounded-5 py-sm-4">
+                    <div class="card-body">
+                        <img class="pt-2 w-50" src="{{ url_for('static', filename='assets/img/biodegradable.png') }}">
+                        <p class="card-text">Learn more about the impact. Get tailored suggestions to reduce your ecological footprint.</p>
+                        <hr>
+                        <a href="{{ url_for('user.sustainability_score') }}" class="btn btn-success btn-sm border rounded-pill card-link" role="button">Personalized Tips</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 my-2" data-aos="fade-up" data-aos-delay="250">
+                <div class="card text-center m-1 rounded-5 py-sm-4">
+                    <div class="card-body">
+                        <img class="pt-2 w-50" src="{{ url_for('static', filename='assets/img/nature-product.png') }}">
+                        <p class="card-text">Calculate the impact of your actions, explore set custom sustainability goals, and track their progress.</p>
+                        <hr>
+                        <a href="{{ url_for('user.impact_calculator') }}" class="btn btn-success btn-sm border rounded-pill card-link" role="button">Interactive Assessment</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 my-2" data-aos="fade-up" data-aos-delay="300">
+                <div class="card text-center m-1 rounded-5 py-sm-4">
+                    <div class="card-body">
+                        <img class="pt-2 w-50" src="{{ url_for('static', filename='assets/img/clouds-and-sun.png') }}">
+                        <p class="card-text">Receive personalized weather insight that are specific to your local environment and climate.</p>
+                        <hr>
+                        <a href="{{ url_for('user.get_weather') }}" class="btn btn-success btn-sm border rounded-pill card-link" role="button">Search Weather</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 my-2" data-aos="fade-up" data-aos-delay="350">
+                <div class="card text-center m-1 rounded-5 py-sm-4">
+                    <div class="card-body">
+                        <img class="pt-2 w-50" src="{{ url_for('static', filename='assets/img/earth.png') }}">
+                        <p class="card-text">Participate in challenges to make a positive impact, for sustainable living and&nbsp; connect with others.</p>
+                        <hr>
+                        <a href="{{ url_for('user.eco_challanges') }}" class="btn btn-success btn-sm border rounded-pill card-link" role="button">Eco Challenges</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- End: Calculator Dashboard -->
+    <!-- Start: Local Weather -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1>Local Weather</h1>
+                <p>Visualize your current weather condition.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 my-2">
+                <div class="card text-center m-1 rounded-5 py-sm-4">
+                    <div class="card-body"><img class="pt-2 w-50" src="assets/img/clouds-and-sun.png">
+                        <h4 class="card-title">Current Conditions</h4>
+                        <p class="card-text">Calculate the impact of your actions, explore set custom sustainability goals, and track their progress.</p>
+                        <hr>
+                        <div class="current-weather container-fluid">
+                            <div>
+                                <h3>Current Conditions in {{city}}</h3>
+                                <p id="current-temp"></p>
+                                <p id="current-desc"></p>
+                            </div>
+                            <hr><img id="weather-icon" class="weather-icon" src="" alt="Weather icon">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 my-2">
+                <div class="card text-center m-1 rounded-5 py-sm-4">
+                    <div class="card-body"><img class="pt-2 w-50" src="assets/img/air-pollution.png">
+                        <h4 class="card-title">Air Quality Index</h4>
+                        <p class="card-text">Calculate the impact of your actions, explore set custom sustainability goals, and track their progress.</p>
+                        <hr>
+                        <div class="aqi-info container-fluid">
+                            <div id="aqi-circle" class="aqi-circle"></div>
+                            <div>
+                                <h3>{{city}} Air Quality Index</h3>
+                                <p id="aqi-description"></p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="forecast" id="forecast"></div>
+                        <div class="eco-tip" id="weather-eco-tip"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

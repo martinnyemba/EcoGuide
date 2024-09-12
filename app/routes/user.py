@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+"""User Blueprint and Routes for the user pages."""
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_required, current_user
 from app import db
@@ -210,3 +212,23 @@ def weather():
 def get_weather():
     """Get weather data for the user's address"""
     return render_template('user/weather.html')
+
+
+@bp.route('/sustainablity_score', methods=['GET'])
+@login_required
+def sustainability_score():
+    """Sustainability Score"""
+    return render_template('user/sustainability_score.html')
+
+
+@bp.route('/recommendations', methods=['GET'])
+@login_required
+def recommendations():
+    """Recommendations"""
+    return render_template('user/recommendations.html')
+
+@bp.route('/eco_challanges', methods=['GET'])
+@login_required
+def eco_challanges():
+    """Eco Challanges"""
+    return render_template('user/eco_challanges.html')

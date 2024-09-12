@@ -150,6 +150,7 @@ class Contact(db.Model):
     timestamp = db.Column(db.DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     def __repr__(self):
+        """Return a string representation of the object."""
         return f'<Contact {self.name}>'
 
 
