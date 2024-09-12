@@ -2,11 +2,138 @@
 {% block title %}
 	Dashboard
 {% endblock %}
+
+{% block stylesheets %}
+	<style>
+    .card-body {
+        padding: 2rem;
+    }
+    .form-control, .form-select {
+        border-radius: 10px;
+    }
+    .btn-primary {
+        background-color: #28a745;
+        border-color: #28a745;
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-weight: bold;
+    }
+    .btn-primary:hover {
+        background-color: #218838;
+        border-color: #218838;
+    }
+    .feature-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgb(37, 185, 106) !important;
+
+    }
+
+    .feature-icon {
+        display: inline-block;
+    }
+
+    #startCalculatingBtn {
+        background-color: #27ae60;
+        border-color: #27ae60;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    #startCalculatingBtn:hover {
+        background-color: #2ecc71;
+        border-color: #2ecc71;
+    }
+    @media (max-width: 768px) {
+        .card-body {
+            padding: 1.5rem;
+        }
+    }
+</style>
+
+{% endblock %}
+
 {% block content %}
+<!-- Start: Calculator Dashboard -->
+    <section class="carbon-footprint-welcome py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <h1 class="text-center py-2">Welcome, <span class="text-success">{{current_user.first_name.capitalize()}} {{current_user.last_name.capitalize()}}</span> ! Let’s Create a Greener Future Together with Eco<span class="text-success">Guide</span>!</h1>
+                <p class="text-center mb-4">Start the journey to Combat Climate Change</p>
+                <p class="text-center mb-5 lead">Discover the impact of your daily activities on the environment with our Carbon Estimates Calculator. Make informed decisions and reduce your carbon footprint!</p>
+
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
+                    <div class="col">
+                        <div class="card h-100 shadow-sm feature-card">
+                            <div class="card-body text-center">
+                                <span class="feature-icon display-4 mb-3">⚡️</span>
+                                <h3 class="card-title h5">Electricity</h3>
+                                <p class="card-text">Estimate emissions from power generation in your area.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100 shadow-sm feature-card">
+                            <div class="card-body text-center">
+                                <span class="feature-icon display-4 mb-3">✈️</span>
+                                <h3 class="card-title h5">Passenger Flights</h3>
+                                <p class="card-text">Calculate emissions based on passengers and flight distance.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100 shadow-sm feature-card">
+                            <div class="card-body text-center">
+                                <span class="feature-icon display-4 mb-3">📦</span>
+                                <h3 class="card-title h5">Shipping</h3>
+                                <p class="card-text">Assess the carbon impact of shipping goods between locations.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100 shadow-sm feature-card">
+                            <div class="card-body text-center">
+                                <span class="feature-icon display-4 mb-3">🚗</span>
+                                <h3 class="card-title h5">Vehicles</h3>
+                                <p class="card-text">Estimate emissions for over 42,000 different vehicle models.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100 shadow-sm feature-card">
+                            <div class="card-body text-center">
+                                <span class="feature-icon display-4 mb-3">⛽️</span>
+                                <h3 class="card-title h5">Fuel Combustion</h3>
+                                <p class="card-text">Calculate emissions from various fuel sources in volume and BTU.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100 shadow-sm feature-card">
+                            <div class="card-body text-center">
+                                <span class="feature-icon display-4 mb-3">🧮</span>
+                                <h3 class="card-title h5">Custom Calculator</h3>
+                                <p class="card-text">Create emissions calculations for countries not supported by the carbon interface.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="text-center">
+                    <a href="{{ url_for('user.carbon_estimate') }}" class="btn btn-primary btn-lg px-4 py-2" id="startCalculatingBtn">Start Calculating</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 	<div class="container py-5">
         <div class="row">
             <div class="col-md-12 text-center">
-                <h1>{{current_user.username.capitalize()}}, Welcome to EcoGuide</h1>
+                <h1>Track Your Impact: Measure the Climate Footprint of Your Activities with EcoGuide!</h1>
                 <p>Empower your life with eco-friendly choices. Start making a difference, one small step at a time</p>
             </div>
         </div>
@@ -23,7 +150,8 @@
             </div>
             <div class="col-md-4 my-2" data-aos="fade-up" data-aos-delay="150">
                 <div class="card text-center m-1 rounded-5 py-sm-4">
-                    <div class="card-body"><img class="pt-2 w-50" src="{{ url_for('static', filename='assets/img/recycle.png') }}">
+                    <div class="card-body">
+                        <img class="pt-2 w-50" src="{{ url_for('static', filename='assets/img/recycle.png') }}">
                         <p class="card-text">Calculate the impact of your actions, explore set custom sustainability goals, and track their progress.</p>
                         <hr>
                         <a href="{{ url_for('user.sustainability_score') }}" class="btn btn-success btn-sm border rounded-pill card-link" role="button">Sustanability Quiz</a>
@@ -71,7 +199,8 @@
                 </div>
             </div>
         </div>
-    </div><!-- End: Calculator Dashboard -->
+    </div>
+    <!-- End: Calculator Dashboard -->
     <!-- Start: Local Weather -->
     <div class="container">
         <div class="row">
@@ -80,43 +209,100 @@
                 <p>Visualize your current weather condition.</p>
             </div>
         </div>
-        <div class="row">
+        {% if weather_data %}
+        <div class="row py-5">
             <div class="col-md-6 my-2">
                 <div class="card text-center m-1 rounded-5 py-sm-4">
-                    <div class="card-body"><img class="pt-2 w-50" src="assets/img/clouds-and-sun.png">
-                        <h4 class="card-title">Current Conditions</h4>
-                        <p class="card-text">Calculate the impact of your actions, explore set custom sustainability goals, and track their progress.</p>
+                    <div class="card-body">
+                        <img class="pt-2 w-50" src="{{ url_for('static', filename='assets/img/clouds-and-sun.png') }}">
+                        <h2>Current Weather in {{ weather_data.weather.name }}</h2>
+                        <p class="card-text">
+                            The current temperature is {{ weather_data.weather.main.temp }}°C, but it feels like
+                            {{ weather_data.weather.main.feels_like }}°C, with {{ weather_data.weather.main.humidity }}%
+                            humidity and a wind speed of {{ weather_data.weather.wind.speed }} m/s, while the overall
+                            conditions can be described as {{ weather_data.weather.weather[0].description }}.
+                        </p>
                         <hr>
                         <div class="current-weather container-fluid">
                             <div>
-                                <h3>Current Conditions in {{city}}</h3>
-                                <p id="current-temp"></p>
-                                <p id="current-desc"></p>
+                                <p>Temperature: {{ weather_data.weather.main.temp }}°C</p>
+                                <p>Feels like: {{ weather_data.weather.main.feels_like }}°C</p>
+                                <p>Humidity: {{ weather_data.weather.main.humidity }}%</p>
+                                <p>Wind speed: {{ weather_data.weather.wind.speed }} m/s</p>
+                                <p>Description: {{ weather_data.weather.weather[0].description }}</p>
                             </div>
-                            <hr><img id="weather-icon" class="weather-icon" src="" alt="Weather icon">
+                            <hr>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-6 my-2">
                 <div class="card text-center m-1 rounded-5 py-sm-4">
-                    <div class="card-body"><img class="pt-2 w-50" src="assets/img/air-pollution.png">
-                        <h4 class="card-title">Air Quality Index</h4>
-                        <p class="card-text">Calculate the impact of your actions, explore set custom sustainability goals, and track their progress.</p>
+                    <div class="card-body"><img class="pt-2 w-50" src="{{ url_for('static', filename='assets/img/air-pollution.png') }}">
+                        <h2>Air Quality Index in {{ weather_data.weather.name }}</h2>
+                        <p class="card-text">
+                            {{current_user.first_name.capitalize()}}, the current Air Quality Index (AQI) for {{ weather_data.weather.name }} is {{ weather_data.aqi.list[0].main.aqi }}, with the
+                            following components: CO: {{ weather_data.aqi.list[0].components.co }} μg/m³, NO2:
+                            {{ weather_data.aqi.list[0].components.no2 }} μg/m³, O3: {{ weather_data.aqi.list[0].components.o3 }}
+                            μg/m³, PM2.5: {{ weather_data.aqi.list[0].components.pm2_5 }} μg/m³, and PM10:
+                            {{ weather_data.aqi.list[0].components.pm10 }} μg/m³.
+                        </p>
                         <hr>
                         <div class="aqi-info container-fluid">
                             <div id="aqi-circle" class="aqi-circle"></div>
                             <div>
-                                <h3>{{city}} Air Quality Index</h3>
-                                <p id="aqi-description"></p>
+                                <p>CO: {{ weather_data.aqi.list[0].components.co }} μg/m³</p>
+                                <p>NO2: {{ weather_data.aqi.list[0].components.no2 }} μg/m³</p>
+                                <p>O3: {{ weather_data.aqi.list[0].components.o3 }} μg/m³</p>
+                                <p>PM2.5: {{ weather_data.aqi.list[0].components.pm2_5 }} μg/m³</p>
+                                <p>PM10: {{ weather_data.aqi.list[0].components.pm10 }} μg/m³</p>
                             </div>
                         </div>
                         <hr>
-                        <div class="forecast" id="forecast"></div>
                         <div class="eco-tip" id="weather-eco-tip"></div>
                     </div>
                 </div>
             </div>
         </div>
+        {% else %}
+            <p>Weather information is not available. Please update your address in your profile.</p>
+        {% endif %}
     </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const startCalculatingBtn = document.getElementById('startCalculatingBtn');
+
+    startCalculatingBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        // Redirect to the carbon estimate page
+        window.location.href = '{{ url_for("user.carbon_estimate") }}';
+    });
+
+    // Add animation to the feature cards on scroll
+    const featureCards = document.querySelectorAll('.feature-card');
+
+    const observerOptions = {
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    featureCards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        observer.observe(card);
+    });
+});
+</script>
 {% endblock %}

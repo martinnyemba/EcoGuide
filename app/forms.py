@@ -3,7 +3,7 @@
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
-    SelectField, FloatField, IntegerField
+    SelectField, FloatField, IntegerField, DecimalField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, \
     Length, Optional
 from app.models import User, Address
@@ -11,7 +11,15 @@ import re
 
 
 class RegistrationForm(FlaskForm):
-    """Form for users to register an account."""
+    """
+    Form for user registration.
+    Methods:
+    validate_username(self, username)
+        Ensures the username is unique and secure.
+    validate_email(self, email)
+        Ensures the email is unique.
+    """
+
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
@@ -22,7 +30,15 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Sign Up')
 
     def validate_username(self, username):
-        """Function Validate that the username is unique and follows security guidelines."""
+        """
+        Function to validate that the username is unique and follows security guidelines.
+
+        Parameters:
+        username (StringField): The username field from the form.
+
+        Raises:
+        ValidationError: If the username is not unique or does not follow the security guidelines.
+        """
         if not re.match(r'^[\w.-]+$', username.data):
             raise ValidationError('Username can only contain letters, numbers, dots, and underscores.')
         user = User.query.filter_by(username=username.data).first()
@@ -30,7 +46,15 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('That username is taken. Please choose a different one.')
 
     def validate_email(self, email):
-        """Function Validate that the email is unique."""
+        """
+        Function to validate that the email is unique.
+
+        Parameters:
+        email (StringField): The email field from the form.
+
+        Raises:
+        ValidationError: If the email is not unique.
+        """
         user = User.query.filter_by(email=email.data).first()
         if user:
             raise ValidationError('That email is taken. Please choose a different one.')
@@ -91,37 +115,120 @@ class UpdateAddressForm(FlaskForm):
 
 
 class EstimateForm(FlaskForm):
-    """Form for users to calculate their carbon footprint."""
+    """Form for interacting with the Carbon Interface API"""
     estimate_type = SelectField('Estimate Type', choices=[
+        ('', 'Please choose an estimate type'),
         ('electricity', 'Electricity'),
-        ('shipping', 'Shipping'),
         ('flight', 'Flight'),
-        ('vehicle', 'Vehicle')
-    ], validators=[DataRequired()])
+        ('shipping', 'Shipping'),
+        ('vehicle', 'Vehicle'),
+        ('fuel_combustion', 'Fuel Combustion')
+    ], validators=[DataRequired(message='Please select an Estimate Type')])
 
     # Electricity fields
-    electricity_usage = FloatField('Electricity Usage (kWh)', validators=[Optional()])
-    country = StringField('Country', validators=[Optional()])
+    electricity_value = FloatField('Electricity Usage', validators=[Optional()])
+    electricity_unit = SelectField('Electricity Unit', choices=[
+        ('mwh', 'Megawatt Hours (MWh)'),
+        ('kwh', 'Kilowatt Hours (kWh)')
+    ], validators=[Optional()])
+    country = SelectField('Country', choices=[
+        ('us', 'United States of America'),
+        ('ca', 'Canada'),
+        ('at', 'Austria'),
+        ('be', 'Belgium'),
+        ('bg', 'Bulgaria'),
+        ('hr', 'Croatia'),
+        ('cy', 'Cyprus'),
+        ('cz', 'Czechia'),
+        ('dk', 'Denmark'),
+        ('eu27', 'EU-27'),
+        ('eu27plus1', 'EU27+1'),
+        ('ee', 'Estonia'),
+        ('fi', 'Finland'),
+        ('fr', 'France'),
+        ('de', 'Germany'),
+        ('gr', 'Greece'),
+        ('hu', 'Hungary'),
+        ('ie', 'Ireland'),
+        ('it', 'Italy'),
+        ('lv', 'Latvia'),
+        ('lt', 'Lithuania'),
+        ('lu', 'Luxembourg'),
+        ('mt', 'Malta'),
+        ('nl', 'Netherlands'),
+        ('pl', 'Poland'),
+        ('pt', 'Portugal'),
+        ('ro', 'Romania'),
+        ('sk', 'Slovakia'),
+        ('si', 'Slovenia'),
+        ('es', 'Spain'),
+        ('se', 'Sweden'),
+        ('gb', 'United Kingdom'),
+        # Add other countries as needed
+    ], validators=[Optional()])
+    state = StringField('State', validators=[Optional()])
+
+    # Flight fields
+    passengers = IntegerField('Number of Passengers', validators=[Optional()])
+    departure_airport = StringField('Departure Airport', validators=[Optional()])
+    destination_airport = StringField('Destination Airport', validators=[Optional()])
+    return_flight = BooleanField('Return Flight?', validators=[Optional()])
 
     # Shipping fields
-    weight = FloatField('Weight (kg)', validators=[Optional()])
-    distance = FloatField('Distance (km)', validators=[Optional()])
-    method = SelectField('Shipping Method', choices=[
+    weight_value = FloatField('Weight', validators=[Optional()])
+    weight_unit = SelectField('Weight Unit', choices=[
+        ('g', 'Grams (g)'),
+        ('kg', 'Kilograms (kg)'),
+        ('lb', 'Pounds (lb)')
+    ], validators=[Optional()])
+    distance_value = FloatField('Distance', validators=[Optional()])
+    distance_unit = SelectField('Distance Unit', choices=[
+        ('km', 'Kilometers (km)'),
+        ('mi', 'Miles (mi)')
+    ], validators=[Optional()])
+    transport_method = SelectField('Transport Method', choices=[
         ('truck', 'Truck'),
         ('train', 'Train'),
         ('ship', 'Ship'),
         ('plane', 'Plane')
     ], validators=[Optional()])
 
-    # Flight fields
-    passengers = IntegerField('Number of Passengers', validators=[Optional()])
-    departure_airport = StringField('Departure Airport', validators=[Optional()])
-    destination_airport = StringField('Destination Airport', validators=[Optional()])
-
     # Vehicle fields
-    distance_km = FloatField('Distance (km)', validators=[Optional()])
     vehicle_make = StringField('Vehicle Make', validators=[Optional()])
     vehicle_model = StringField('Vehicle Model', validators=[Optional()])
     vehicle_year = IntegerField('Vehicle Year', validators=[Optional()])
 
-    submit = SubmitField('Calculate')
+    # Fuel Combustion fields
+    fuel_source_type = SelectField('Fuel Source Type', choices=[
+        ('bit', 'Bituminous Coal'),
+        ('dfo', 'Home Heating and Diesel Fuel (Distillate)'),
+        ('jf', 'Jet Fuel'),
+        ('ker', 'Kerosene'),
+        ('lig', 'Lignite Coal'),
+        ('msw', 'Municipal Solid Waste'),
+        ('ng', 'Natural Gas'),
+        ('pc', 'Petroleum Coke'),
+        ('pg', 'Propane Gas'),
+        ('rfo', 'Residual Fuel Oil'),
+        ('sub', 'Subbituminous Coal'),
+        ('tdf', 'Tire-Derived Fuel'),
+        ('wo', 'Waste Oil')
+        # Add more fuel types as needed
+    ], validators=[Optional()])
+
+    fuel_source_unit = SelectField('Fuel Source Unit', choices=[
+        ('btu', 'British Thermal Units (BTU)'),
+        ('therm', 'Therms'),
+        ('liter', 'Liters'),
+        ('gallon', 'Gallons'),
+        ('kg', 'Kilograms'),
+        ('lb', 'Pounds'),
+        ('short_ton', 'Short Ton'),
+        ('thousand_cubic_feet', 'Thousand Cubic Feet'),
+        ('barrel', 'Barrel')
+        # Add more units as needed
+    ], validators=[Optional()])
+
+    fuel_source_value = DecimalField('Fuel Source Value', validators=[Optional()])
+
+    submit = SubmitField('Calculate Carbon Estimate')

@@ -38,7 +38,18 @@ tips = [
 @login_required
 def dashboard():
     """Dashboard"""
-    return render_template('user/dashboard.html')
+    user = User.query.get(current_user.id)
+    address = Address.query.filter_by(user_id=user.id).first()
+
+    if address:
+        city = address.city
+        state = address.state
+        country = address.country
+        weather_data = get_weather_and_aqi(city, state, country)
+    else:
+        weather_data = None
+
+    return render_template('user/dashboard.html', weather_data=weather_data)
 
 
 @bp.route('/carbon_estimate', methods=['GET', 'POST'])

@@ -6,6 +6,14 @@ def get_weather_and_aqi(city, state, country):
     """
     Returns weather, Air Quality Index (AQI), and 3-hour interval
     forecast data for a given location.
+
+    Parameter:
+        city: The city name for which the weather and AQI data are required.
+        state: The state name for the given city.
+        country: The country name for the given city
+
+    Returns:
+        dict: Weather, AQI, and forecast data.
     """
     api_key = current_app.config['OPENWEATHERMAP_API_KEY']
 

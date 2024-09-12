@@ -1,110 +1,317 @@
 {% extends 'base.html' %}
-{% block title %}
-    Carbon Estimates
+{% block title %}Carbon Estimates{% endblock %}
+{% block stylesheets %}
+    <style>
+        .card-body {
+            padding: 2rem;
+        }
+        .form-control, .form-select {
+            border-radius: 10px;
+        }
+        .btn-primary {
+            background-color: #28a745;
+            border-color: #28a745;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: bold;
+        }
+        .btn-primary:hover {
+            background-color: #218838;
+            border-color: #218838;
+        }
+        #resultCard {
+            transition: all 0.3s ease;
+        }
+        @media (max-width: 768px) {
+            .card-body {
+                padding: 1.5rem;
+            }
+        }
+    </style>
 {% endblock %}
-
-{% block stylesheets %}{% endblock %}
-
 {% block content %}
-    <section>
-        <div class="container py-5">
-            <h1 class="text-center mb-5" data-aos="zoom-in-up" data-aos-delay="150">Carbon Estimate Calculator</h1>
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <div class="card">
-                        <div class="card-body">
-                            <form id="estimateForm"><span> {{ form.hidden_tag() }} </span>
+
+<section>
+    <div class="container py-5">
+        <h1 class="text-center mb-5" data-aos="zoom-in-up" data-aos-delay="150">Carbon Estimate Calculator</h1>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="card">
+                    <div class="card-body">
+                        <form id="estimateForm">
+                            {{ form.hidden_tag() }}
+
+                            <div class="mb-3">
+                                {{ form.estimate_type.label }}
+                                {{ form.estimate_type(class="form-control") }}
+                            </div>
+
+                            <div id="electricityFields" style="display:none;">
                                 <div class="mb-3">
-                                    <label class="form-label" for="estimate_type">Estimate Type</label>
-                                    <select class="form-select form-select" id="estimate_type" name="estimate_type">
-                                        <option value="electricity">Electricity</option>
-                                        <option value="shipping">Shipping</option>
-                                        <option value="flight">Flight</option>
-                                        <option value="vehicle">Vehicle</option>
-                                    </select>
+                                    {{ form.electricity_value.label }}
+                                    {{ form.electricity_value(class="form-control") }}
                                 </div>
-                                <div id="electricityFields">
-                                    <div class="mb-3"><label class="form-label" for="electricity_usage">Electricity Usage (kWh)</label><input class="form-control form-control" type="number" id="electricity_usage" name="electricity_usage"></div>
-                                    <div class="mb-3"><label class="form-label" for="country">Country</label><input class="form-control form-control" type="text" id="country" name="country"></div>
+                                <div class="mb-3">
+                                    {{ form.electricity_unit.label }}
+                                    {{ form.electricity_unit(class="form-control") }}
                                 </div>
-                                <div id="shippingFields" style="display:none;">
-                                    <div class="mb-3"><label class="form-label" for="weight">Weight (kg)</label><input class="form-control form-control" type="number" id="weight" name="weight"></div>
-                                    <div class="mb-3"><label class="form-label" for="distance">Distance (km)</label><input class="form-control form-control" type="number" id="distance" name="distance"></div>
-                                    <div class="mb-3"><label class="form-label" for="method">Shipping Method</label><select class="form-select form-select" id="method" name="method">
-                                            <option value="truck">Truck</option>
-                                            <option value="train">Train</option>
-                                            <option value="ship">Ship</option>
-                                            <option value="plane">Plane</option>
-                                        </select></div>
+                                <div class="mb-3">
+                                    {{ form.country.label }}
+                                    {{ form.country(class="form-control") }}
                                 </div>
-                                <div id="flightFields" style="display:none;">
-                                    <div class="mb-3"><label class="form-label" for="passengers">Number of Passengers</label><input class="form-control form-control" type="number" id="passengers" name="passengers"></div>
-                                    <div class="mb-3"><label class="form-label" for="departure_airport">Departure Airport</label><input class="form-control form-control" type="text" id="departure_airport" name="departure_airport"></div>
-                                    <div class="mb-3"><label class="form-label" for="destination_airport">Destination Airport</label><input class="form-control form-control" type="text" id="destination_airport" name="destination_airport"></div>
+                                <div class="mb-3">
+                                    {{ form.state.label }}
+                                    {{ form.state(class="form-control") }}
                                 </div>
-                                <div id="vehicleFields" style="display:none;">
-                                    <div class="mb-3"><label class="form-label" for="distance_km">Distance (km)</label><input class="form-control form-control" type="number" id="distance_km" name="distance_km"></div>
-                                    <div class="mb-3"><label class="form-label" for="vehicle_make">Vehicle Make</label><input class="form-control form-control" type="text" id="vehicle_make" name="vehicle_make"></div>
-                                    <div class="mb-3"><label class="form-label" for="vehicle_model">Vehicle Model</label><input class="form-control form-control" type="text" id="vehicle_model" name="vehicle_model"></div>
-                                    <div class="mb-3"><label class="form-label" for="vehicle_year">Vehicle Year</label><input class="form-control form-control" type="number" id="vehicle_year" name="vehicle_year"></div>
+                            </div>
+
+                            <div id="flightFields" style="display:none;">
+                                <div class="mb-3">
+                                    {{ form.passengers.label }}
+                                    {{ form.passengers(class="form-control") }}
                                 </div>
-                                <hr class="my-4"><button class="btn btn-success border rounded-pill w-100" data-bss-hover-animate="pulse" type="submit">Get Carbon Estimate</button>
-                            </form>
-                        </div>
+                                <div class="mb-3">
+                                    {{ form.departure_airport.label }}
+                                    {{ form.departure_airport(class="form-control") }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.destination_airport.label }}
+                                    {{ form.destination_airport(class="form-control") }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.return_flight.label }}
+                                    {{ form.return_flight(class="form-check-input") }}
+                                </div>
+                            </div>
+
+                            <div id="shippingFields" style="display:none;">
+                                <div class="mb-3">
+                                    {{ form.weight_value.label }}
+                                    {{ form.weight_value(class="form-control") }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.weight_unit.label }}
+                                    {{ form.weight_unit(class="form-control") }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.distance_value.label }}
+                                    {{ form.distance_value(class="form-control") }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.distance_unit.label }}
+                                    {{ form.distance_unit(class="form-control") }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.transport_method.label }}
+                                    {{ form.transport_method(class="form-control") }}
+                                </div>
+                            </div>
+
+                            <div id="vehicleFields" style="display:none;">
+                                <div class="mb-3">
+                                    {{ form.distance_value.label }}
+                                    {{ form.distance_value(class="form-control") }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.distance_unit.label }}
+                                    {{ form.distance_unit(class="form-control") }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.vehicle_make.label }}
+                                    {{ form.vehicle_make(class="form-control") }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.vehicle_model.label }}
+                                    {{ form.vehicle_model(class="form-control") }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.vehicle_year.label }}
+                                    {{ form.vehicle_year(class="form-control") }}
+                                </div>
+                            </div>
+                            <div id="combustionFields" style="display:none;">
+                                <div class="mb-3">
+                                    {{ form.fuel_source_type.label }}
+                                    {{ form.fuel_source_type(class="form-control") }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.fuel_source_unit.label }}
+                                    {{ form.fuel_source_unit(class="form-control") }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.fuel_source_value.label }}
+                                    {{ form.fuel_source_value(class="form-control") }}
+                                </div>
+                            </div>
+
+                            <hr>
+                            <button type="submit" class="btn btn-primary w-100 rounded-5">Get Carbon Estimate</button>
+                        </form>
                     </div>
                 </div>
             </div>
-            <div class="row justify-content-center mt-5" id="resultCard" style="display:none;">
-                <div class="col-md-8">
+        </div>
+
+        <div class="row justify-content-center mt-5">
+            <div class="col-lg-8 col-md-10">
+                <div id="resultCard" style="display:none;">
                     <div class="card">
                         <div class="card-body">
-                            <h2 class="card-title">Estimate Result</h2><pre id="resultJson" class="bg-success p-3 rounded"></pre>
+                            <h2 class="card-title">Estimate Result</h2>
+                            <div id="resultContent" class="bg-success p-3 rounded-4"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
 {% endblock %}
 
 {% block scripts %}
-    <script>
-        $(document).ready(function() {
-            function showFields(estimateType) {
-                $('#electricityFields, #shippingFields, #flightFields, #vehicleFields').hide();
-                $(`#${estimateType}Fields`).show();
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('estimateForm');
+    const resultCard = document.getElementById('resultCard');
+    const resultContent = document.getElementById('resultContent');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        fetch('/carbon_estimate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => {
+            resultCard.style.display = 'block';
+            resultContent.innerHTML = formatEstimateResult(data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            resultCard.style.display = 'block';
+            resultContent.innerHTML = '<p class="text-danger">An error occurred while fetching the estimate. Please try again.</p>';
+        });
+    });
+
+    function formatEstimateResult(data) {
+        if (data.data && data.data.attributes) {
+            const estimateType = data.data;
+            const attrs = data.data.attributes;
+            let html = `
+                <p><strong>Carbon Estimate:</strong></p>
+                <ul>
+                    <li>${attrs.carbon_g} grams</li>
+                    <li>${attrs.carbon_lb} pounds</li>
+                    <li>${attrs.carbon_kg} kilograms</li>
+                    <li>${attrs.carbon_mt} metric tons</li>
+                </ul>
+                <p><strong>Estimate Type:</strong> ${estimateType.type}</p>
+                <p><strong>Estimated At:</strong> ${new Date(attrs.estimated_at).toLocaleString()}</p>
+            `;
+
+            if (attrs.electricity_value) {
+                html += `
+                    <p><strong>Electricity Usage:</strong> ${attrs.electricity_value} ${attrs.electricity_unit}</p>
+                    <p><strong>Country:</strong> ${attrs.country}</p>
+                    <p><strong>State:</strong> ${attrs.state}</p>
+                `;
+            }
+            if (attrs.passengers) {
+                html += `
+                    <p><strong>Passengers:</strong> ${attrs.passengers}</p>
+                    <p><strong>Flight(s):</strong></p>
+                    <ul>
+                `;
+                attrs.legs.forEach(leg => {
+                    html += `<li>${leg.departure_airport} to ${leg.destination_airport}</li>`;
+                });
+                html += `</ul>`;
+            }
+            if (attrs.weight_value) {
+                html += `
+                    <p><strong>Weight:</strong> ${attrs.weight_value} ${attrs.weight_unit}</p>
+                    <p><strong>Distance:</strong> ${attrs.distance_value} ${attrs.distance_unit}</p>
+                    <p><strong>Transport Method:</strong> ${attrs.transport_method}</p>
+                `;
+            }
+            if (attrs.vehicle_make) {
+                html += `
+                    <p><strong>Vehicle:</strong> ${attrs.vehicle_make} ${attrs.vehicle_model} (${attrs.vehicle_year})</p>
+                    <p><strong>Distance:</strong> ${attrs.distance_value} ${attrs.distance_unit}</p>
+                `;
+            }
+            if (attrs.fuel_source_type) {
+                html += `
+                    <p><strong>Fuel Source Type:</strong> ${attrs.fuel_source_type}</p>
+                    <p><strong>Fuel Source Amount:</strong> ${attrs.fuel_source_value}</p>
+                    <p><strong>Fuel Source Unit:</strong> ${attrs.fuel_source_unit}</p>
+                `;
             }
 
-            $('#estimate_type').change(function() {
-                showFields($(this).val());
-            });
+            return html;
+        } else {
+            return '<p class="text-danger">Unable to process the estimate result. Please try again.</p>';
+        }
+    }
 
-            $('#estimateForm').submit(function(e) {
-                e.preventDefault();
-                const formData = new FormData(this);
+    // Show/hide fields based on estimate type
+    const estimateTypeSelect = document.getElementById('estimate_type');
+    estimateTypeSelect.addEventListener('change', function() {
+        const selectedType = this.value;
+        document.getElementById('electricityFields').style.display = selectedType === 'electricity' ? 'block' : 'none';
+        document.getElementById('flightFields').style.display = selectedType === 'flight' ? 'block' : 'none';
+        document.getElementById('shippingFields').style.display = selectedType === 'shipping' ? 'block' : 'none';
+        document.getElementById('vehicleFields').style.display = selectedType === 'vehicle' ? 'block' : 'none';
+        document.getElementById('combustionFields').style.display = selectedType === 'fuel_combustion' ? 'block' : 'none';
+    });
+});
+</script>
 
-                $.ajax({
-                    url: '{{ url_for('user.carbon_estimate') }}',
-                    method: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    success: function(result) {
-                        $('#resultJson').text(JSON.stringify(result, null, 2));
-                        $('#resultCard').show();
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error:', error);
-                        alert('An error occurred. Please try again.');
-                    }
-                });
-            });
+{# Javascript to update the Selection of Fuel Combustion Units #}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fuelSourceUnitMap = {
+        'bit': ['short_ton', 'btu'],
+        'dfo': ['gallon', 'btu'],
+        'jf': ['gallon', 'btu'],
+        'ker': ['gallon', 'btu'],
+        'lig': ['short_ton', 'btu'],
+        'msw': ['short_ton', 'btu'],
+        'ng': ['thousand_cubic_feet', 'btu'],
+        'pc': ['gallon', 'btu'],
+        'pg': ['gallon', 'btu'],
+        'rfo': ['gallon', 'btu'],
+        'sub': ['short_ton', 'btu'],
+        'tdf': ['short_ton', 'btu'],
+        'wo': ['barrel', 'btu']
+    };
 
-            // Initialize with the default estimate type
-            showFields($('#estimate_type').val());
+    const fuelSourceSelect = document.querySelector('select[name="fuel_source_type"]');
+    const unitSelect = document.querySelector('select[name="fuel_source_unit"]');
+
+    fuelSourceSelect.addEventListener('change', function() {
+        const selectedFuelSource = this.value;
+        const units = fuelSourceUnitMap[selectedFuelSource] || [];
+
+        // Clear existing options
+        unitSelect.innerHTML = '';
+
+        // Add new options
+        units.forEach(function(unit) {
+            const option = document.createElement('option');
+            option.value = unit;
+            option.text = unit;
+            unitSelect.add(option);
         });
-    </script>
+    });
+});
+</script>
 {% endblock %}
