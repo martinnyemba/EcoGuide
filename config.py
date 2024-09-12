@@ -35,7 +35,6 @@ class Config:
     LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
 
 
-
 class DevelopmentConfig(Config):
     DEBUG = True
 
