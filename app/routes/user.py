@@ -195,16 +195,25 @@ def settings():
     return render_template('user/settings.html')
 
 
-@bp.route('/weather', methods=['POST'])
+@bp.route('/weather', methods=['GET', 'POST'])
 @login_required
 def weather():
+    if not request.is_json:
+        return jsonify({"error": "Request must be JSON"}), 400
+
     data = request.json
     city = data.get('city')
     state = data.get('state')
     country = data.get('country')
 
-    weather_data = get_weather_and_aqi(city, state, country)
-    return jsonify(weather_data)
+    if not all([city, country]):  # state can be optional
+        return jsonify({"error": "Missing required fields"}), 400
+
+    try:
+        weather_data = get_weather_and_aqi(city, state, country)
+        return jsonify(weather_data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @bp.route('/get_weather', methods=['GET', 'POST'])

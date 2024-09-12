@@ -82,8 +82,12 @@
                 const state = document.getElementById('state').value;
                 const country = document.getElementById('country').value;
 
+                if (!city || !country) {
+                    alert('Please enter both city and country');
+                    return;
+                }
                 try {
-                    const response = await fetch('{{url_for('user.weather')}}', {
+                    const response = await fetch('/weather', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
