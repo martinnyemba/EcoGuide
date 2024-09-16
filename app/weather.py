@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+"""Module to fetch weather data from OpenWeatherMap API."""
+
 import requests
 from flask import current_app
 
