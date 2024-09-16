@@ -11,7 +11,7 @@
                 <div style="max-width: 350px;">
                     <h1 class="display-6 text-capitalize fw-bold" data-aos="zoom-in-up" data-aos-delay="100">Eco<span style="color: rgb(40, 167, 69);">Guide</span>&nbsp;- Your Personalized Path to Sustainable Living</h1>
                     <p class="fs-5 my-3" data-aos="fade-up" data-aos-delay="150">Empower your life with eco-friendly choices. Join us in making a difference, one small step at a time.</p>
-                    <a class="btn btn-outline-primary btn-lg border rounded-pill me-2" role="button" data-bss-hover-animate="pulse" href="#">Get Started</a>
+                    <a class="btn btn-outline-primary btn-lg border rounded-pill me-2" role="button" data-bss-hover-animate="pulse" href="{{ url_for('auth.register') }}">Get Started</a>
                 </div>
             </div>
             <div class="col-md-6">
@@ -19,78 +19,76 @@
             </div>
         </div>
     </div><!-- End: Hero Section -->
-    <!-- Start: Features: 2 Rows 1+3 Columns -->
     <div class="container py-5">
         <div class="row">
-            <div class="col-md-12 text-center" style="background: url({{ url_for('static', filename='assets/img/nature-product.png') }}) top / cover;">
-                <h2 class="display-1 fw-bold text-secondary" data-aos="zoom-in" data-aos-delay="100">Why Choose EcoGuide?</h2>
-                <p class="fs-5 text-success-emphasis" data-aos="fade-up" data-aos-delay="150">Your personal assistant for sustainable living</p>
+            <div class="col-md-12 text-center">
+                <h1>Track Your Impact: Measure the Climate Footprint of Your Activities with EcoGuide!</h1>
+                <p>Empower your life with eco-friendly choices. Start making a difference, one small step at a time</p>
             </div>
         </div>
         <div class="row my-2">
             <div class="col-md-4 my-2" data-aos="fade-up" data-aos-delay="100">
                 <div class="card text-center m-1 rounded-5 py-sm-4">
-                    <div class="card-body"><img class="pt-2 w-50" src="{{ url_for('static', filename='assets/img/eco.png') }}">
-                        <h4 class="card-title">Eco Footprinting</h4>
-                        <h6 class="text-muted card-subtitle mb-2">Calculator</h6>
-                        <p class="card-text">Track&nbsp; and monitor your Carbon Footprint. Calculate the impact of your actions, .</p>
+                    <div class="card-body">
+                        <img class="pt-2 w-50" src="{{ url_for('static', filename='assets/img/eco.png') }}">
+                        <p class="card-text">Track&nbsp; and monitor your Carbon Footprint. Calculate the impact of your actions.</p>
                         <hr>
-                        <a href="{{ url_for('user.calculator') }}" class="btn btn-success btn-sm border rounded-pill card-link" role="button">Get Started</a>
+                        <a href="{{ url_for('user.calculator') }}" class="btn btn-success btn-sm border rounded-pill card-link" role="button">Carbon Footprinting</a>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 my-2" data-aos="fade-up" data-aos-delay="150">
                 <div class="card text-center m-1 rounded-5 py-sm-4">
-                    <div class="card-body"><img class="pt-2 w-50" src="{{ url_for('static', filename='assets/img/recycle.png') }}">
-                        <h4 class="card-title">Sustanability Score</h4>
-                        <h6 class="text-muted card-subtitle mb-2">Calculator</h6>
+                    <div class="card-body">
+                        <img class="pt-2 w-50" src="{{ url_for('static', filename='assets/img/recycle.png') }}">
                         <p class="card-text">Calculate the impact of your actions, explore set custom sustainability goals, and track their progress.</p>
-                        <hr><a class="btn btn-success btn-sm border rounded-pill card-link" role="button">Get Started</a>
+                        <hr>
+                        <a href="{{ url_for('user.sustainability_score') }}" class="btn btn-success btn-sm border rounded-pill card-link" role="button">Sustanability Quiz</a>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 my-2" data-aos="fade-up" data-aos-delay="200">
                 <div class="card text-center m-1 rounded-5 py-sm-4">
-                    <div class="card-body"><img class="pt-2 w-50" src="{{ url_for('static', filename='assets/img/biodegradable.png') }}">
-                        <h4 class="card-title">Personalized Tips</h4>
-                        <h6 class="text-muted card-subtitle mb-2">Tips</h6>
-                        <p class="card-text">Learn more about the impact. Get tailored suggestions to reduce your ecological footprint..</p>
-                        <hr><a class="btn btn-success btn-sm border rounded-pill card-link" role="button">Get Started</a>
+                    <div class="card-body">
+                        <img class="pt-2 w-50" src="{{ url_for('static', filename='assets/img/biodegradable.png') }}">
+                        <p class="card-text">Learn more about the impact. Get tailored suggestions to reduce your ecological footprint.</p>
+                        <hr>
+                        <a href="{{ url_for('user.sustainability_score') }}" class="btn btn-success btn-sm border rounded-pill card-link" role="button">Personalized Tips</a>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 my-2" data-aos="fade-up" data-aos-delay="250">
                 <div class="card text-center m-1 rounded-5 py-sm-4">
-                    <div class="card-body"><img class="pt-2 w-50" src="{{ url_for('static', filename='assets/img/nature-product.png') }}">
-                        <h4 class="card-title">Interactive Impact Assessment</h4>
-                        <h6 class="text-muted card-subtitle mb-2">Calculator</h6>
+                    <div class="card-body">
+                        <img class="pt-2 w-50" src="{{ url_for('static', filename='assets/img/nature-product.png') }}">
                         <p class="card-text">Calculate the impact of your actions, explore set custom sustainability goals, and track their progress.</p>
-                        <hr><a class="btn btn-success btn-sm border rounded-pill card-link" role="button">Get Started</a>
+                        <hr>
+                        <a href="{{ url_for('user.impact_calculator') }}" class="btn btn-success btn-sm border rounded-pill card-link" role="button">Interactive Assessment</a>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 my-2" data-aos="fade-up" data-aos-delay="300">
                 <div class="card text-center m-1 rounded-5 py-sm-4">
-                    <div class="card-body"><img class="pt-2 w-50" src="{{ url_for('static', filename='assets/img/clouds-and-sun.png') }}">
-                        <h4 class="card-title">Localized Weather Insights</h4>
-                        <h6 class="text-muted card-subtitle mb-2">Weather</h6>
+                    <div class="card-body">
+                        <img class="pt-2 w-50" src="{{ url_for('static', filename='assets/img/clouds-and-sun.png') }}">
                         <p class="card-text">Receive personalized weather insight that are specific to your local environment and climate.</p>
-                        <hr><a class="btn btn-success btn-sm border rounded-pill card-link" role="button">Get Started</a>
+                        <hr>
+                        <a href="{{ url_for('user.get_weather') }}" class="btn btn-success btn-sm border rounded-pill card-link" role="button">Search Weather</a>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 my-2" data-aos="fade-up" data-aos-delay="350">
                 <div class="card text-center m-1 rounded-5 py-sm-4">
-                    <div class="card-body"><img class="pt-2 w-50" src="{{ url_for('static', filename='assets/img/earth.png') }}">
-                        <h4 class="card-title">Participate in Eco Challenges</h4>
-                        <h6 class="text-muted card-subtitle mb-2">Knowledge</h6>
+                    <div class="card-body">
+                        <img class="pt-2 w-50" src="{{ url_for('static', filename='assets/img/earth.png') }}">
                         <p class="card-text">Participate in challenges to make a positive impact, for sustainable living and&nbsp; connect with others.</p>
-                        <hr><a class="btn btn-success btn-sm border rounded-pill card-link" role="button">Get Started</a>
+                        <hr>
+                        <a href="{{ url_for('user.eco_challanges') }}" class="btn btn-success btn-sm border rounded-pill card-link" role="button">Eco Challenges</a>
                     </div>
                 </div>
             </div>
         </div>
-    </div><!-- End: Features: 2 Rows 1+3 Columns -->
+    </div>
     <!-- Start: Call to Action Banner Light -->
     <section class="py-4 py-xl-5">
         <div class="container">
@@ -100,7 +98,7 @@
                     <p class="fs-5 text-muted mb-0" data-aos="fade-up" data-aos-delay="200">Sign up today and take the first step toward a more sustainable lifestyle. Start tracking your carbon footprint and get personalized recommendations for a more sustainable lifestyle, <span style="color: rgb(255, 255, 255);">Eco</span><span style="color: rgb(40, 167, 69);">Guide</span> is here to help.</p>
                 </div>
                 <div class="text-center my-2">
-                    <a class="btn btn-success fs-5 border rounded-pill py-2 px-4" role="button" href="#">Sign Up</a>
+                    <a class="btn btn-success fs-5 border rounded-pill py-2 px-4" role="button" href="{{ url_for('auth.register') }}">Sign Up</a>
                 </div>
             </div>
         </div>
