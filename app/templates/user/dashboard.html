@@ -61,7 +61,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-10">
-                <h1 class="text-center py-2">Welcome, <span class="text-success">{{current_user.first_name.capitalize()}} {{current_user.last_name.capitalize()}}</span> ! Let’s Create a Greener Future Together with Eco<span class="text-success">Guide</span>!</h1>
+                <h1 class="text-center py-2">Welcome, <span class="text-success">{{ current_user.first_name or 'Guest' }} {{ current_user.last_name or 'User' }}</span> ! Let’s Create a Greener Future Together with Eco<span class="text-success">Guide</span>!</h1>
                 <p class="text-center mb-4">Start the journey to Combat Climate Change</p>
                 <p class="text-center mb-5 lead">Discover the impact of your daily activities on the environment with our Carbon Estimates Calculator. Make informed decisions and reduce your carbon footprint!</p>
 

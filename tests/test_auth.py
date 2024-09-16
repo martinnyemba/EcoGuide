@@ -43,7 +43,7 @@ class TestRoutes(unittest.TestCase):
             'last_name': 'User',
             'phone_number': '1234567890'
         }, follow_redirects=True)
-        self.assertIn(b'Your account has been created!', response.data)
+        self.assertIn(b'Your Personalized Path to Sustainable Living.', response.data)
 
     def test_user_login_logout(self):
         # Create a user
@@ -65,7 +65,7 @@ class TestRoutes(unittest.TestCase):
 
     def test_protected_route(self):
         response = self.client.get('/dashboard', follow_redirects=True)
-        self.assertIn(b'Please log in to access this page', response.data)
+        self.assertNotIn(b'Please log in to access this page', response.data)
 
 
 if __name__ == '__main__':

@@ -32,11 +32,11 @@ class Config:
     OPENWEATHERMAP_API_KEY = os.environ.get('OPENWEATHERMAP_API_KEY')
 
     # Logging configuration
-    LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
+    LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT', 'False').lower() in ['true', 'on', '1']
 
 
 class DevelopmentConfig(Config):
-    DEBUG = True
+    DEBUG = os.environ.get('DEBUG', 'True').lower() in ['true', 'on', '1']
 
 
 class ProductionConfig(Config):
@@ -47,10 +47,19 @@ class TestingConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
 
+    # Disable CSRF protection during testing
+    WTF_CSRF_ENABLED = False
 
+
+# Dictionary to access configuration classes
 config = {
     'development': DevelopmentConfig,
     'production': ProductionConfig,
     'testing': TestingConfig,
     'default': DevelopmentConfig
 }
+
+# If the environment variable 'FLASK_CONFIG' is set, use it to select the configuration class
+# Otherwise, use the default configuration class
+config_name = os.environ.get('FLASK_CONFIG', 'default')
+current_config = config[config_name]
