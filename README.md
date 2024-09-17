@@ -212,27 +212,26 @@ ecoguide/
 │   │   └── admin.py
 │   ├── static/
 │   │   ├── assets/
-|   │       ├──js/
-|   │       ├──css/
-|   │       ├──img/
-|   │       ├──bootstrap/
-│   │   
+│   │   │   ├── js/
+│   │   │   ├── css/
+│   │   │   ├── img/
+│   │   │   └── bootstrap/
 │   ├── templates/
 │   │   ├── base.html
 │   │   ├── index.html
-|   │   ├── contact.html
-|   │   ├── features.html
-|   │   ├── how-it-works.html
-|   │   ├── errors/
+│   │   ├── contact.html
+│   │   ├── features.html
+│   │   ├── how-it-works.html
+│   │   ├── errors/
 │   │   ├── auth/
 │   │   ├── user/
 │   │   └── admin/
 │   ├── forms.py
-|   ├── weather.py
+│   ├── weather.py
 │   ├── carbon_interface.py
 │   └── utils.py
 │
-├── screeenshots/
+├── screenshots/
 ├── tests/
 ├── migrations/
 ├── instance/
@@ -242,14 +241,15 @@ ecoguide/
 ├── .gitignore
 ├── .dockerignore
 ├── .env.example
-└── Procfile
-└── Dockerfile
-└── docker-compose.yml
-└── README.md
-└── LICENSE.md
-└── CONTRIBUTING.md
-└── README.Docker.md
+├── Procfile
+├── Dockerfile
+├── docker-compose.yml
+├── README.md
+├── LICENSE.md
+├── CONTRIBUTING.md
+├── README.Docker.md
 └── run.py
+
 ```
 
 ## Related Projects
@@ -260,11 +260,11 @@ ecoguide/
 
 ## Licensing
 
-This project is licensed under the MIT License - see the [LICENSE](.LICENCE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](.LICENSE) file for details.
 
 ## Contact
 
-Martin Nyemba - [@MartinNyemba](https://twitter.com/MARTINNYEMBA) - martinnyemba@gmail.com
+Martin Nyemba - [@NYEMBAMARTIN](https://twitter.com/NYEMBAMARTIN) - martinnyemba@gmail.com
 
 Project Link: [https://github.com/martinnyemba/EcoGuide](https://github.com/martinnyemba/EcoGuide)
 
