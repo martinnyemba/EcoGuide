@@ -260,11 +260,11 @@ ecoguide/
 
 ## Licensing
 
-This project is licensed under the MIT License - see the [LICENSE.md](.LICENCE.md) file for details.
+This project is licensed under the MIT License - see the [LICENSE](.LICENCE) file for details.
 
 ## Contact
 
-Martin Nyemba - [@MartinNyemba](https://twitter.com/MARTINNYEMBA) - martin.nyemba@example.com
+Martin Nyemba - [@MartinNyemba](https://twitter.com/MARTINNYEMBA) - martinnyemba@gmail.com
 
 Project Link: [https://github.com/martinnyemba/EcoGuide](https://github.com/martinnyemba/EcoGuide)
 
