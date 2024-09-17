@@ -1,171 +1,200 @@
 # EcoGuide
-**Your Personalized Path to Sustainable Living**
+
+## Your Personalized Path to Sustainable Living
 ![EcoGuide](screenshots/landing-1.PNG)
+EcoGuide is a web application designed to empower individuals and organizations to calculate there carbon footprint and support their journey towards sustainable living by providing tools to understand, track, and reduce their carbon footprint.
 
-## Overview
-EcoGuide is a comprehensive platform designed to help individuals, families, and small businesses adopt more sustainable living practices. By leveraging user data and various environmental APIs, EcoGuide provides tailored, actionable recommendations to help you reduce your carbon footprint and make eco-friendly choices.
+[Visit EcoGuide](https://www.ecoguide-app.com) | [Read the Project Blog](https://medium.com/@martin-nyemba/ecoguide-journey-to-sustainable-living-12345abcdef)
 
-## App Features
-![](screenshots/why-choose-ecogude.PNG)
+## Table of Contents
+- [Introduction](#introduction)
+- [Features](#features)
+- [Installation](#installation)
+  - [Traditional Setup](#traditional-setup)
+  - [Docker Setup](#docker-setup)
+- [Usage](#usage)
+- [Technology Stack](#technology-stack)
+- [API Reference](#api-reference)
+- [Contributing](#contributing)
+- [Screenshots](#screenshots)
+- [Core project structure and main files](#core-project-structure-and-main-files)
+- [Related Projects](#related-projects)
+- [Licensing](#licensing)
+- [Contact](#contact)
+
+## Introduction
+EcoGuide was inspired by the critical need for individuals to accurately calculate and understand their impact on climate and the environment.
+
+Our core mission is to empower users to measure their carbon footprint and make informed decisions for sustainable living.
+
+We aim to bridge the gap between environmental awareness and actionable, personalized steps towards reducing one's carbon footprint.
+In an era where climate change and environmental degradation are pressing global issues, EcoGuide serves as a personal environmental impact advisor. By leveraging modern technology and data from reliable sources, EcoGuide helps users make informed decisions about their lifestyle choices and their impact on the environment.
+
+### Author
+
+**Martin Nyemba** - Full Stack Developer
+
+[LinkedIn](https://www.linkedin.com/in/martin-nyemba-chikaya/) | [GitHub](https://github.com/martinnyemba)
+
+## Features
+
 EcoGuide offers a suite of tools to support your journey toward sustainability. Here’s a detailed look at its core features:
 
-### 1. Eco Footprinting Calculator
+![App features](screenshots/features.PNG)
+
+### 1. Carbon Footprint Calculator
 - **Description**: Monitor and track your carbon footprint by assessing the environmental impact of your daily activities. This tool provides insights to help you understand and reduce your carbon footprint.
 
-### 2. Sustainability Score Calculator
+### 2. Sustainability Quiz
 - **Description**: Set personalized sustainability goals and evaluate the impact of your actions. Track your progress over time with measurable improvements toward a greener lifestyle.
 
-### 3. Personalized Tips
+### 3. Personalized Recommendations for Sustainable Living
 - **Description**: Receive customized recommendations to reduce your ecological footprint. Based on your data, EcoGuide offers actionable suggestions to help you make more sustainable choices.
 
 ### 4. Interactive Impact Assessment
 - **Description**: Evaluate the overall impact of your lifestyle choices on the environment. This interactive tool allows you to explore different scenarios, set goals, and monitor your progress in real-time.
 
-### 5. Localized Weather Insights
+### 5. Local Weather and Air Quality Insights
 - **Description**: Access personalized weather information tailored to your local environment and climate. Make informed decisions based on real-time and forecasted weather data to support eco-friendly practices.
 
-### 6. Participate in Eco Challenges
+### 6. Eco-Challenges and Community Engagement
 - **Description**: Join sustainability challenges designed to encourage positive environmental actions. Connect with a community of like-minded individuals and track your contributions toward a greener future.
 
-### 7. User Account and Progress Tracking
-- **Description**: Create and manage your account to save your progress, set goals, and receive personalized recommendations. This feature ensures continuous and customized support throughout your sustainability journey.
+## Installation
 
-### 8. Sign Up and Get Started
-- **Description**: Begin your eco-friendly journey today. Sign up to start tracking your carbon footprint, receive personalized recommendations, and take the first step towards a more sustainable lifestyle with EcoGuide.
+### Traditional Setup
 
----
+To set up EcoGuide locally, follow these steps:
 
-EcoGuide provides a user-friendly platform with essential tools for sustainable living. Whether you are beginning your journey or looking to enhance your current practices, EcoGuide is equipped to support and guide you.
+```bash
+# Clone the repository
+git clone https://github.com/martinnyemba/EcoGuide.git
 
----
+# Navigate to the project directory
+cd EcoGuide
 
-## Technologies
+# Create a virtual environment
+python3 -m venv venv
+
+# Activate the virtual environment
+source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your API keys and database settings
+
+# Initialize the database
+flask db upgrade
+
+# Run the application
+flask run
+```
+
+### Docker Setup
+
+If you prefer using Docker, follow these steps to run EcoGuide:
+
+1. Ensure you have Docker and Docker Compose installed on your system.
+
+2. Clone the repository:
+   ```bash
+   git clone https://github.com/martinnyemba/EcoGuide.git
+   cd EcoGuide
+   ```
+
+3. Create a `.env` file in the project root and add your environment variables:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your API keys and other settings
+   ```
+
+4. Build and run the Docker containers:
+   ```bash
+   docker-compose up --build
+   ```
+
+   This command will build the Docker image and start the containers for the EcoGuide app and its PostgreSQL database.
+
+5. The application will be available at `http://localhost:8000`.
+
+6. To stop the containers, use:
+   ```bash
+   docker-compose down
+   ```
+
+7. For subsequent runs (if you haven't changed the Dockerfile or requirements), you can simply use:
+   ```bash
+   docker-compose up
+   ```
+
+Note: The Docker setup uses PostgreSQL as the database, even in development, to ensure consistency with the production environment.
+
+## Usage
+
+After installation, you can access EcoGuide at `http://localhost:8000`. Here's how to use the main features:
+
+1. **Calculate Your Carbon Footprint**: Navigate to the calculator page and input your lifestyle data.
+2. **View Recommendations**: After calculation, you'll receive personalized suggestions for reducing your carbon footprint.
+3. **Check Local Insights**: Enter your location to view current weather and air quality data.
+4. **Join Eco-Challenges**: Participate in community challenges from the Challenges page.
+
+For a more detailed guide, please refer to our [User Manual](https://github.com/martinnyemba/EcoGuide/blob/main/README.md).
+
+## Technology Stack
+
 - **Frontend**: Bootstrap, HTML5, Javascript and jQuery
-- **Backend**: Flask Framework
+- **Backend**: Python
+- **Framework**: Flask Framework
 - **Database**: PostgreSQL, MySQL, Flask SQLAlchemy
 - **APIs**: OpenWeatherMap API, Carbon Interface API
-- **Cloud Platform**: Heroku, Containerization
+- **Cloud Platform**: Heroku Platform
+- **Containerization**: Docker
 - **Version Control**: Git, GitHub
 - **Testing**: Unittests
 
-## Models
+## API Reference
+
+EcoGuide uses the following APIs:
+
+- [Carbon Interface API](https://www.carboninterface.com/docs)
+- [OpenWeatherMap API](https://openweathermap.org/api)
+
+Please refer to their respective documentation for more information on usage and endpoints.
+
+## Contributing
+
+We welcome contributions to EcoGuide! Here's how you can help:
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
 ## Screenshots
 
 Here’s a visual preview of EcoGuide’s features and interface:
 
-| ![Eco Footprinting Calculator](screenshots/calculator.PNG) | ![Sustainability Score Calculator](screenshots/sustanability-score.PNG) |
-|:---------------------------------------------:|:-------------------------------------------------:|
-|        **Eco Footprinting Calculator**        |        **Sustainability Score Calculator**        |
+| ![Eco Footprinting Calculator](screenshots/electricity.PNG) |      ![Sustainability Score](screenshots/quiz-score.PNG)      |
+|:---------------------------------------------:|:-------------------------------------------------------------:|
+|      **Carbon Footprinting Calculator**       |              **Sustainability Quiz Calculator**               |
 
 | ![Personalized Tips](screenshots/landing-1.PNG) | ![Interactive Impact Assessment](screenshots/impact-calculator.PNG) |
 |:-----------------------------------:|:-----------------------------------------------:|
 |        **Personalized Tips**        |        **Interactive Impact Assessment**        |
 
-| ![Localized Weather Insights](screenshots/landing-1.PNG) | ![Participate in Eco Challenges](screenshots/why-choose-ecogude.PNG) |
-|:--:|:-----------------------------------------------:|
-| **Localized Weather Insights** |        **Participate in Eco Challenges**        |
+| ![Localized Weather Insights](screenshots/weather.PNG) | ![User Profile](screenshots/profile.PNG) |
+|:--------------------------------------------:|:------------------------------:|
+|        **Localized Weather Insights**        |        **User Profile**        |
 
-| ![User Account and Progress Tracking](screenshots/register.PNG) | ![Sign Up and Get Started](screenshots/login.PNG) |
-|:----------------------------------------------------:|:-----------------------------------------:|
-|        **User Account and Progress Tracking**        |        **Sign Up and Get Started**        |
-
-
-# - Database Models
-----------------------------------------------------
-
-This section explains the database models used in our application. Below is a detailed description of each model and its relationships.
-
-## Models
-
-### Role
-- **Table Name**: `roles`
-- **Columns**:
-  - `id`: Integer, Primary Key
-  - `name`: String(64), Unique
-- **Relationships**:
-  - `users`: One-to-Many relationship with `User`
-
-### User
-- **Table Name**: `users`
-- **Columns**:
-  - `id`: Integer, Primary Key
-  - `username`: String(64), Indexed, Unique
-  - `email`: String(120), Indexed, Unique
-  - `password_hash`: String(128)
-  - `first_name`: String(64)
-  - `last_name`: String(64)
-  - `phone_number`: String(20)
-  - `reset_token`: String(100)
-  - `reset_token_expiration`: DateTime
-  - `role_id`: Integer, Foreign Key (`roles.id`)
-- **Relationships**:
-  - `activities`: One-to-Many relationship with `Activity`
-  - `recommendations`: One-to-Many relationship with `Recommendation`
-  - `user_challenges`: One-to-Many relationship with `UserChallenges`
-  - `carbon_footprint`: One-to-One relationship with `CarbonFootprint`
-  - `address`: One-to-One relationship with `Address`
-
-### Address
-- **Table Name**: `addresses`
-- **Columns**:
-  - `id`: Integer, Primary Key
-  - `street`: String(128)
-  - `city`: String(64)
-  - `state`: String(64)
-  - `country`: String(64)
-  - `user_id`: Integer, Foreign Key (`users.id`)
-
-### Activity
-- **Table Name**: `activities`
-- **Columns**:
-  - `id`: Integer, Primary Key
-  - `user_id`: Integer, Foreign Key (`users.id`)
-  - `activity_type`: String(20)
-  - `description`: String(200)
-  - `carbon_impact`: Float
-  - `date`: Date, Default to current date
-
-### Recommendation
-- **Table Name**: `recommendations`
-- **Columns**:
-  - `id`: Integer, Primary Key
-  - `title`: String(100)
-  - `description`: String(500)
-  - `impact`: Float
-  - `user_id`: Integer, Foreign Key (`users.id`)
-
-### Contact
-- **Table Name**: `contacts`
-- **Columns**:
-  - `id`: Integer, Primary Key
-  - `name`: String(64), Indexed
-  - `email`: String(120), Indexed
-  - `message`: Text
-  - `timestamp`: DateTime, Indexed, Default to current date
-
-### UserChallenges
-- **Table Name**: `user_challenges`
-- **Columns**:
-  - `id`: Integer, Primary Key
-  - `user_id`: Integer, Foreign Key (`users.id`)
-  - `challenge_id`: Integer, Foreign Key (`eco_challenges.id`)
-- **Relationships**:
-  - `eco_challenge`: Many-to-One relationship with `EcoChallenges`
-
-### CarbonFootprint
-- **Table Name**: `carbon_footprints`
-- **Columns**:
-  - `id`: Integer, Primary Key
-  - `user_id`: Integer, Foreign Key (`users.id`)
-  - `footprint`: Float
-
-### EcoChallenges
-- **Table Name**: `eco_challenges`
-- **Columns**:
-  - `id`: Integer, Primary Key
-  - `name`: String(80)
-  - `description`: Text
+| ![User Account and Progress Tracking](screenshots/signup-today.PNG) | ![Sign Up and Get Started](screenshots/login-mobile.PNG) |
+|:----------------------------------------------------:|:------------------------------------------:|
+|        **User Account and Progress Tracking**        |        **Sign Up and Get Started**         |
 
 ## Core project structure and main files
 
@@ -211,13 +240,32 @@ ecoguide/
 ├── requirements.txt
 ├── .env
 ├── .gitignore
+├── .dockerignore
+├── .env.example
 └── Procfile
+└── Dockerfile
+└── docker-compose.yml
+└── README.md
+└── LICENSE.md
+└── CONTRIBUTING.md
+└── README.Docker.md
 └── run.py
 ```
 
-## Team
-**Martin Nyemba**: Full-stack Developer and Project Lead  
-As the sole developer, I handle all aspects of EcoGuide, including design, development, testing, and deployment. This approach ensures streamlined decision-making and consistent implementation.
+## Related Projects
 
-## Author
-**Martin Nyemba**
+- [Carbon Footprint Calculator by WWF](https://footprint.wwf.org.uk/#/)
+- [GreenChoice App](https://www.greenchoice.com/)
+- [Joulebug](https://joulebug.com/)
+
+## Licensing
+
+This project is licensed under the MIT License - see the [LICENSE.md](.LICENCE.md) file for details.
+
+## Contact
+
+Martin Nyemba - [@MartinNyemba](https://twitter.com/MARTINNYEMBA) - martin.nyemba@example.com
+
+Project Link: [https://github.com/martinnyemba/EcoGuide](https://github.com/martinnyemba/EcoGuide)
+
+
