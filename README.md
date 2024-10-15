@@ -4,7 +4,7 @@
 ![EcoGuide](screenshots/landing-1.PNG)
 EcoGuide is a web application designed to empower individuals and organizations to calculate there carbon footprint and support their journey towards sustainable living by providing tools to understand, track, and reduce their carbon footprint.
 
-[Visit EcoGuide](https://www.ecoguide-app.com) | [Read the Project Blog](https://medium.com/@martin-nyemba/ecoguide-journey-to-sustainable-living-12345abcdef)
+[Visit EcoGuide](http://ecoguide-app-85a02a75659d.herokuapp.com/) | [Read the Project Blog](https://medium.com/@martin-nyemba/ecoguide-journey-to-sustainable-living-12345abcdef)
 
 ## Table of Contents
 - [Introduction](#introduction)
